@@ -69,7 +69,7 @@
         <div class="headRight">
         </div>
         <div class="headTitle">
-            <h3>Session List</h3>
+            <h3>Add Student</h3>
         </div>
     </div>
 </header>
@@ -94,34 +94,64 @@
 
 
     <section>
-        <div class="cntWrap">
-            <ul class="list noTitle">
-                <!-- <li class="tblRow">
-                    <div class="tblCell"><input type="text" class="form-control" id="search"
-                                                placeholder="Search Citizen by Name"></div>
-                    <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
-                </li> -->
-                <li class="link">
-                    <a href="dummy.html">
-                        <div class="nameCPR">OOD Exam</div>
-                        <span class="medium">November 16th 6:00 pm - 8:00 pm</span>
-                    </a>
-                </li>
-                <li class="link">
-                    <a href="dummy.html">
-                        <div class="nameCPR">NLP Exam</div>
-                        <span class="medium">November 17th 6:00 pm - 8:00 pm</span>
-                    </a>
-                </li>
-                <li class="link">
-                    <a href="dummy.html">
-                        <div class="nameCPR">ANN Exam</div>
-                        <span class="medium">November 18th 6:00 pm - 8:00 pm</span>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
+      <div class="cntWrap">
+          <h5>Add Student</h5>
+          <ul class="list">
+              <li>
+                  <div>
+                      <form id="addStudent">
+                          <div class="row">
+                              <div class="col-xs-12 col-sm-6">
+                                  <div class="form-group">
+                                      <label for="firstName" class="control-label">First Name</label>
+                                      <input type="text" class="form-control" id="firstName"
+                                             name="searchCitizenFormInput" placeholder="Enter First Name">
+                                  </div>
+                              </div>
+                              <div class="col-xs-12 col-sm-6">
+                                  <div class="form-group">
+                                      <label for="lastName" class="control-label">Last Name</label>
+                                      <input type="text" class="form-control" id="lastName"
+                                             name="searchCitizenFormInput" placeholder="Enter Last Name">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-xs-12 col-sm-6">
+                                  <div class="form-group">
+                                      <label for="uid" class="control-label">Enter Student Id</label>
+                                      <input type="text" class="form-control" id="citCPR"
+                                             name="searchCitizenFormInput" placeholder="Enter Student Id">
+                                  </div>
+                              </div>
+                              <div class="col-xs-12 col-sm-6">
+                                  <div class="form-group">
+                                      <label for="street" class="control-label">Email Id</label>
+                                      <input type="text" class="form-control" id="street"
+                                             name="searchCitizenFormInput" placeholder="Enter Email">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-xs-12">
+                                  <div class="alert alert-danger medium" style="display: none">Please fill at least
+                                      one search criteria.
+                                  </div>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </li>
+              <li>
+                  <div class="text-right">
+                      <button type="button" class="mBtn cancelBtn disableBtn" id="clearForm">Clear</button>
+                      <button type="button" class="mBtn" id="searchResource" data-toggle="modal"
+                              data-target="#searchCit"><a href="studentList.html" class='mtbn' style="color : white">Add</a>
+                      </button>
+                  </div>
+              </li>
+          </ul>
+      </div>
     </section><!-- main contianer div ended -->
 </div>
 
