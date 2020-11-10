@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="VitaeGo">
-    <meta name="author" content="Bhasker Agrawal">
+    <meta name="description" content="ProcSmart">
+    <meta name="author" content="Pranay Kumar Verma">
     <title>ProcSmart</title>
     <!--<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">-->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/app.css" rel="stylesheet">
 
 </head>
+
 <body class="hideSlideMenu">
 
-<nav class="slideMenu">
-    <!-- Login information container -->
-    <div class="loginInfo">
-        <div class="snapHolder"><img src="imgs/img1.png"/></div>
-        <div class="loginDetail"><h5>Student Name</h5>
-            <p>Student<br>User id: std</p>
+    <nav class="slideMenu">
+        <!-- Login information container -->
+        <div class="loginInfo">
+            <div class="snapHolder"><img src="imgs/img1.png" /></div>
+            <div class="loginDetail">
+                <h5>Admin Name</h5>
+                <p>Admin<br>Admin id: std</p>
+            </div>
         </div>
-    </div>
-    <!-- Citizen based navigation -->
-    <!-- <ul class="nav" id="citizenNav">
+        <!-- Citizen based navigation -->
+        <!-- <ul class="nav" id="citizenNav">
         <li class="disable"><a href="#">Medicine</a></li>
         <li><a href="serviceOverview.html">Service Overview <b class="semiDeveloped">&#9679;</b></a></li>
         <li class="disable">
@@ -38,44 +41,44 @@
         <li class="disable"><a href="#">Notes</a></li>
         <li><a href="citPlan.html">Citizen Plan <b class="semiDeveloped">&#9679;</b></a></li>
     </ul> -->
-    <!--<div class="nav" id="citizenNav"></div>-->
-    <!-- Application based navigation -->
-    <ul class="nav" id="appNav">
-      <li>
-          <a href="createSession.html"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
-      </li>
-      <li>
-          <a href="addStudent.html"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
-      </li>
-      <li>
-          <a href="sessionListAdmin.html"><i class="glyphicon glyphicon-search"></i> Session List</a>
-      </li>
-      <li>
-          <a href="studentList.html"><i class="glyphicon glyphicon-comment"></i> Student List</a>
-      </li>
-        <li>
-            <a href="indexAdmin.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
-        </li>
-    </ul>
-</nav>
+        <!--<div class="nav" id="citizenNav"></div>-->
+        <!-- Application based navigation -->
+        <ul class="nav" id="appNav">
+            <li>
+                <a href="createSession.html"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
+            </li>
+            <li>
+                <a href="addStudent.html"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
+            </li>
+            <li>
+                <a href="sessionListAdmin.html"><i class="glyphicon glyphicon-search"></i> Session List</a>
+            </li>
+            <li>
+                <a href="studentList.html"><i class="glyphicon glyphicon-comment"></i> Student List</a>
+            </li>
+            <li>
+                <a href="indexAdmin.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+            </li>
+        </ul>
+    </nav>
 
-<header>
-    <div class="cntWrap clearfix">
-        <div class="headLeft">
-            <a href="#" id="tglNav"></a>
-            <span class="linkDvdr"></span>
-            <!-- <a href="colleagueVisit.html" id="back"></a> -->
+    <header>
+        <div class="cntWrap clearfix">
+            <div class="headLeft">
+                <a href="#" id="tglNav"></a>
+                <span class="linkDvdr"></span>
+                <!-- <a href="colleagueVisit.html" id="back"></a> -->
+            </div>
+            <div class="headRight">
+            </div>
+            <div class="headTitle">
+                <h3>Student List</h3>
+            </div>
         </div>
-        <div class="headRight">
-        </div>
-        <div class="headTitle">
-            <h3>Student List</h3>
-        </div>
-    </div>
-</header>
+    </header>
 
-<!-- Citizen context bar -->
-<!-- <a href="#" class="citizenBar clearfix" data-toggle="modal" data-target="#citDetail">
+    <!-- Citizen context bar -->
+    <!-- <a href="#" class="citizenBar clearfix" data-toggle="modal" data-target="#citDetail">
     <div class="cntWrap">
         <div class="padd-10">
             <div class="danger clearfix">
@@ -90,36 +93,36 @@
     </div>
 </a> -->
 
-<div id="container">
+    <div id="container">
 
 
-    <section>
-      <div class="cntWrap">
-          <ul class="list noTitle" id="colleagueList">
-              <li class="tblRow">
-                  <div class="tblCell"><input type="text" class="form-control" id="search"
-                                              placeholder="Search Student by Name"></div>
-                  <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
-              </li>
-              <li class="link">
-                  <a href="dummy.html" class="citizen">A</a>
-              </li>
-              <li class="link">
-                  <a href="dummy.html" class="citizen">B</a>
-              </li>
-              <li class="link">
-                  <a href="dummy.html" class="citizen">C</a>
-              </li>
-              <li class="link">
-                  <a href="dummy.html" class="citizen">D</a>
-              </li>
-          </ul>
-      </div>
-    </section><!-- main contianer div ended -->
-</div>
+        <section>
+            <div class="cntWrap">
+                <ul class="list noTitle" id="colleagueList">
+                    <li class="tblRow">
+                        <div class="tblCell"><input type="text" class="form-control" id="search"
+                                placeholder="Search Student by Name"></div>
+                        <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
+                    </li>
+                    <li class="link">
+                        <a href="dummy.html" class="citizen">A</a>
+                    </li>
+                    <li class="link">
+                        <a href="dummy.html" class="citizen">B</a>
+                    </li>
+                    <li class="link">
+                        <a href="dummy.html" class="citizen">C</a>
+                    </li>
+                    <li class="link">
+                        <a href="dummy.html" class="citizen">D</a>
+                    </li>
+                </ul>
+            </div>
+        </section><!-- main contianer div ended -->
+    </div>
 
-<footer>
-    <!--<div class="cntWrap">
+    <footer>
+        <!--<div class="cntWrap">
             <div class="footerBtn clearfix">
                 <a href="#" class="mBtn">Save</a>
             </div>
@@ -127,11 +130,12 @@
         <div class="noNetwork small">
             <div class="cntWrap">No Network!</div>
         </div>-->
-</footer>
+    </footer>
 
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<script src="js/autosize.min.js"></script>
-<script src="js/structure.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/autosize.min.js"></script>
+    <script src="js/structure.js"></script>
 </body>
+
 </html>
