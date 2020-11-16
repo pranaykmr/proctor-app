@@ -1,18 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 29 17:52:00 2020
-
-@author: hp
-"""
 
 import cv2
 import numpy as np
 
-def get_face_detector(modelFile = "models/res10_300x300_ssd_iter_140000.caffemodel",
-                      configFile = "models/deploy.prototxt"):
+
+def get_face_detector(modelFile="models/res10_300x300_ssd_iter_140000.caffemodel",
+                      configFile="models/deploy.prototxt"):
     """
     Get the face detection caffe model of OpenCV's DNN module
-    
+
     Parameters
     ----------
     modelFile : string, optional
@@ -30,10 +25,11 @@ def get_face_detector(modelFile = "models/res10_300x300_ssd_iter_140000.caffemod
     model = cv2.dnn.readNetFromCaffe(configFile, modelFile)
     return model
 
+
 def find_faces(img, model):
     """
     Find the faces in an image
-    
+
     Parameters
     ----------
     img : np.uint8
@@ -49,7 +45,7 @@ def find_faces(img, model):
     """
     h, w = img.shape[:2]
     blob = cv2.dnn.blobFromImage(cv2.resize(img, (300, 300)), 1.0,
-	(300, 300), (104.0, 177.0, 123.0))
+                                 (300, 300), (104.0, 177.0, 123.0))
     model.setInput(blob)
     res = model.forward()
     faces = []
@@ -60,6 +56,7 @@ def find_faces(img, model):
             (x, y, x1, y1) = box.astype("int")
             faces.append([x, y, x1, y1])
     return faces
+
 
 def draw_faces(img, faces):
     """
@@ -79,4 +76,3 @@ def draw_faces(img, faces):
     """
     for x, y, x1, y1 in faces:
         cv2.rectangle(img, (x, y), (x1, y1), (0, 0, 255), 3)
-        
