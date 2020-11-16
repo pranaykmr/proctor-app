@@ -1,4 +1,5 @@
 from flask import Flask, Response, render_template
+
 # from head_pose_estimation import *
 import cv2
 import numpy as np
@@ -8,74 +9,64 @@ from face_landmarks import get_landmark_model, detect_marks, draw_marks
 import json
 import tensorflow as tf
 from tensorflow.keras import Model
-from tensorflow.keras.layers import (
-    Add,
-    Concatenate,
-    Conv2D,
-    Input,
-    Lambda,
-    LeakyReLU,
-    UpSampling2D,
-    ZeroPadding2D,
-    BatchNormalization
-)
+from tensorflow.keras.layers import Add, Concatenate, Conv2D, Input, Lambda, LeakyReLU, UpSampling2D, ZeroPadding2D, BatchNormalization
 from tensorflow.keras.regularizers import l2
 import wget
+
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/index.html')
+@app.route("/")
+@app.route("/index.html")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/sessionList.html')
+@app.route("/sessionList.html")
 def sessionList():
-    return render_template('sessionList.html')
+    return render_template("sessionList.html")
 
 
-@app.route('/admin')
-@app.route('/indexAdmin.html')
+@app.route("/admin")
+@app.route("/indexAdmin.html")
 def indexAdmin():
-    return render_template('indexAdmin.html')
+    return render_template("indexAdmin.html")
 
 
-@app.route('/addStudent.html')
+@app.route("/addStudent.html")
 def addStudent():
-    return render_template('addStudent.html')
+    return render_template("addStudent.html")
 
 
-@app.route('/createSession.html')
+@app.route("/createSession.html")
 def createSession():
-    return render_template('createSession.html')
+    return render_template("createSession.html")
 
 
-@app.route('/dummy.html')
+@app.route("/dummy.html")
 def dummy():
-    return render_template('dummy.html')
+    return render_template("dummy.html")
 
 
-@app.route('/sessionListAdmin.html')
+@app.route("/sessionListAdmin.html")
 def sessionListAdmin():
-    return render_template('sessionListAdmin.html')
+    return render_template("sessionListAdmin.html")
 
 
-@app.route('/studentList.html')
+@app.route("/studentList.html")
 def studentList():
-    return render_template('studentList.html')
+    return render_template("studentList.html")
 
 
-@app.route('/examPage.html')
+@app.route("/examPage.html")
 def examPage():
-    return render_template('examPage.html')
+    return render_template("examPage.html")
 
 
-@app.route('/run_model')
+@app.route("/run_model")
 def run_model():
     video = cv2.VideoCapture(0)
-    return Response(base_model(video),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(base_model(video), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 def base_model(cap):
@@ -83,60 +74,53 @@ def base_model(cap):
     landmark_model = get_landmark_model()
     ret, img = cap.read()
     size = img.shape
-    model_points = np.array([
-        (0.0, 0.0, 0.0),             # Nose tip
-        (0.0, -330.0, -65.0),        # Chin
-        # Left eye left corner
-        (-225.0, 170.0, -135.0),
-        # Right eye right corne
-        (225.0, 170.0, -135.0),
-        # Left Mouth corner
-        (-150.0, -150.0, -125.0),
-        # Right mouth corner
-        (150.0, -150.0, -125.0)
-    ])
+    model_points = np.array(
+        [
+            (0.0, 0.0, 0.0),  # Nose tip
+            (0.0, -330.0, -65.0),  # Chin
+            # Left eye left corner
+            (-225.0, 170.0, -135.0),
+            # Right eye right corne
+            (225.0, 170.0, -135.0),
+            # Left Mouth corner
+            (-150.0, -150.0, -125.0),
+            # Right mouth corner
+            (150.0, -150.0, -125.0),
+        ]
+    )
     # Camera internals
     focal_length = size[1]
-    center = (size[1]/2, size[0]/2)
-    camera_matrix = np.array(
-        [[focal_length, 0, center[0]],
-         [0, focal_length, center[1]],
-         [0, 0, 1]], dtype="double"
-    )
+    center = (size[1] / 2, size[0] / 2)
+    camera_matrix = np.array([[focal_length, 0, center[0]], [0, focal_length, center[1]], [0, 0, 1]], dtype="double")
 
     # mouth
     outer_points = [[49, 59], [50, 58], [51, 57], [52, 56], [53, 55]]
-    d_outer = [0]*5
+    d_outer = [0] * 5
     inner_points = [[61, 67], [62, 66], [63, 65]]
-    d_inner = [0]*3
+    d_inner = [0] * 3
 
     # YoloV3
     yolo = YoloV3()
-    load_darknet_weights(yolo, 'models/yolov3.weights')
+    load_darknet_weights(yolo, "models/yolov3.weights")
 
     # eye tracker
     left = [36, 37, 38, 39, 40, 41]
     right = [42, 43, 44, 45, 46, 47]
     kernel = np.ones((9, 9), np.uint8)
-    logger = {'head_logger': [], 'mouth_logger': [],
-              'phone_logger': [], 'eye_logger': []}
+    logger = {"head_logger": [], "mouth_logger": [], "phone_logger": [], "eye_logger": []}
     while True:
         ret, img = cap.read()
-        ret, jpeg = cv2.imencode('.jpg', img)
+        ret, jpeg = cv2.imencode(".jpg", img)
         frame = jpeg.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-        headpos = head_position(
-            cap, face_model, landmark_model, model_points, camera_matrix)
-        mouthopen = mouth_opening(
-            cap, face_model, landmark_model, outer_points, d_outer, inner_points, d_inner)
+        yield (b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
+        headpos = head_position(cap, face_model, landmark_model, model_points, camera_matrix)
+        mouthopen = mouth_opening(cap, face_model, landmark_model, outer_points, d_outer, inner_points, d_inner)
         phone = person_and_phone(cap, yolo)
-        eyetrack = eye_tracker(
-            cap, face_model, landmark_model, kernel, left, right)
-        logger['head_logger'].extend(headpos)
-        logger['mouth_logger'].extend(mouthopen)
-        logger['phone_logger'].extend(phone)
-        logger['eye_logger'].extend(eyetrack)
+        eyetrack = eye_tracker(cap, face_model, landmark_model, kernel, left, right)
+        logger["head_logger"].extend(headpos)
+        logger["mouth_logger"].extend(mouthopen)
+        logger["phone_logger"].extend(phone)
+        logger["eye_logger"].extend(eyetrack)
         # json_object=json.dumps(logger, indent = 4)
         with open("log.json", "w") as outfile:
             json.dump(logger, outfile)
@@ -156,17 +140,14 @@ def eye_tracker(cap, face_model, landmark_model, kernel, left, right):
         eyes = cv2.bitwise_and(img, img, mask=mask)
         mask = (eyes == [0, 0, 0]).all(axis=2)
         eyes[mask] = [255, 255, 255]
-        mid = (shape[42][0] + shape[39][0]) // 2
+        mid = int((shape[42][0] + shape[39][0]) // 2)
         eyes_gray = cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(eyes_gray, 50, 255, cv2.THRESH_BINARY)
         thresh = process_thresh(thresh)
 
-        eyeball_pos_left = contouring(
-            thresh[:, 0:mid], mid, img, end_points_left)
-        eyeball_pos_right = contouring(
-            thresh[:, mid:], mid, img, end_points_right, True)
-        eye_logger.extend(print_eye_pos(
-            img, eyeball_pos_left, eyeball_pos_right))
+        eyeball_pos_left = contouring(thresh[:, 0:mid], mid, img, end_points_left)
+        eyeball_pos_right = contouring(thresh[:, mid:], mid, img, end_points_right, True)
+        eye_logger.extend(print_eye_pos(img, eyeball_pos_left, eyeball_pos_right))
     return eye_logger
 
 
@@ -185,13 +166,13 @@ def person_and_phone(cap, yolo):
         if int(classes[0][i] == 0):
             count += 1
         if int(classes[0][i] == 67):
-            phone_logger.append('Mobile Phone detected')
+            phone_logger.append("Mobile Phone detected")
             # print('Mobile Phone detected')
     if count == 0:
-        phone_logger.append('No person detected')
+        phone_logger.append("No person detected")
         # print('No person detected')
     elif count > 1:
-        phone_logger.append('More than one person detected')
+        phone_logger.append("More than one person detected")
         # print('More than one person detected')
     return phone_logger
 
@@ -204,41 +185,41 @@ def head_position(cap, face_model, landmark_model, model_points, camera_matrix):
     for face in faces:
         marks = detect_marks(img, landmark_model, face)
         # mark_detector.draw_marks(img, marks, color=(0, 255, 0))
-        image_points = np.array([
-                                marks[30],     # Nose tip
-                                marks[8],     # Chin
-                                marks[36],     # Left eye left corner
-                                marks[45],     # Right eye right corne
-                                marks[48],     # Left Mouth corner
-                                marks[54]      # Right mouth corner
-                                ], dtype="double")
+        image_points = np.array(
+            [
+                marks[30],  # Nose tip
+                marks[8],  # Chin
+                marks[36],  # Left eye left corner
+                marks[45],  # Right eye right corne
+                marks[48],  # Left Mouth corner
+                marks[54],  # Right mouth corner
+            ],
+            dtype="double",
+        )
         dist_coeffs = np.zeros((4, 1))  # Assuming no lens distortion
-        (success, rotation_vector, translation_vector) = cv2.solvePnP(
-            model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_UPNP)
+        (success, rotation_vector, translation_vector) = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_UPNP)
 
         # Project a 3D point (0, 0, 1000.0) onto the image plane.
         # We use this to draw a line sticking out of the nose
 
-        (nose_end_point2D, jacobian) = cv2.projectPoints(np.array(
-            [(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, camera_matrix, dist_coeffs)
+        (nose_end_point2D, jacobian) = cv2.projectPoints(np.array([(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, camera_matrix, dist_coeffs)
 
         # for p in image_points:
         #     cv2.circle(img, (int(p[0]), int(p[1])), 3, (0,0,255), -1)
 
         p1 = (int(image_points[0][0]), int(image_points[0][1]))
         p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
-        x1, x2 = head_pose_points(
-            img, rotation_vector, translation_vector, camera_matrix)
+        x1, x2 = head_pose_points(img, rotation_vector, translation_vector, camera_matrix)
 
         try:
-            m = (p2[1] - p1[1])/(p2[0] - p1[0])
+            m = (p2[1] - p1[1]) / (p2[0] - p1[0])
             ang1 = int(math.degrees(math.atan(m)))
         except:
             ang1 = 90
 
         try:
-            m = (x2[1] - x1[1])/(x2[0] - x1[0])
-            ang2 = int(math.degrees(math.atan(-1/m)))
+            m = (x2[1] - x1[1]) / (x2[0] - x1[0])
+            ang2 = int(math.degrees(math.atan(-1 / m)))
         except:
             ang2 = 90
 
@@ -282,7 +263,7 @@ def mouth_opening(cap, face_model, landmark_model, outer_points, d_outer, inner_
             if d_inner[i] + 2 < shape[p2][1] - shape[p1][1]:
                 cnt_inner += 1
         if cnt_outer > 3 and cnt_inner > 2:
-            mouth_logger.append('Mouth open')
+            mouth_logger.append("Mouth open")
             # print('Mouth open')
     return mouth_logger
 
@@ -309,18 +290,14 @@ def get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val):
     point_3d = np.array(point_3d, dtype=np.float).reshape(-1, 3)
 
     # Map to 2d img points
-    (point_2d, _) = cv2.projectPoints(point_3d,
-                                      rotation_vector,
-                                      translation_vector,
-                                      camera_matrix,
-                                      dist_coeffs)
+    (point_2d, _) = cv2.projectPoints(point_3d, rotation_vector, translation_vector, camera_matrix, dist_coeffs)
     point_2d = np.int32(point_2d.reshape(-1, 2))
     return point_2d
 
 
-def draw_annotation_box(img, rotation_vector, translation_vector, camera_matrix,
-                        rear_size=300, rear_depth=0, front_size=500, front_depth=400,
-                        color=(255, 255, 0), line_width=2):
+def draw_annotation_box(
+    img, rotation_vector, translation_vector, camera_matrix, rear_size=300, rear_depth=0, front_size=500, front_depth=400, color=(255, 255, 0), line_width=2
+):
     """
     Draw a 3D anotation box on the face for head pose estimation
 
@@ -356,23 +333,19 @@ def draw_annotation_box(img, rotation_vector, translation_vector, camera_matrix,
     rear_size = 1
     rear_depth = 0
     front_size = img.shape[1]
-    front_depth = front_size*2
+    front_depth = front_size * 2
     val = [rear_size, rear_depth, front_size, front_depth]
-    point_2d = get_2d_points(img, rotation_vector,
-                             translation_vector, camera_matrix, val)
+    point_2d = get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val)
     # # Draw all the lines
     cv2.polylines(img, [point_2d], True, color, line_width, cv2.LINE_AA)
-    cv2.line(img, tuple(point_2d[1]), tuple(
-        point_2d[6]), color, line_width, cv2.LINE_AA)
-    cv2.line(img, tuple(point_2d[2]), tuple(
-        point_2d[7]), color, line_width, cv2.LINE_AA)
-    cv2.line(img, tuple(point_2d[3]), tuple(
-        point_2d[8]), color, line_width, cv2.LINE_AA)
+    cv2.line(img, tuple(point_2d[1]), tuple(point_2d[6]), color, line_width, cv2.LINE_AA)
+    cv2.line(img, tuple(point_2d[2]), tuple(point_2d[7]), color, line_width, cv2.LINE_AA)
+    cv2.line(img, tuple(point_2d[3]), tuple(point_2d[8]), color, line_width, cv2.LINE_AA)
 
 
 def head_pose_points(img, rotation_vector, translation_vector, camera_matrix):
     """
-    Get the points to estimate head pose sideways    
+    Get the points to estimate head pose sideways
 
     Parameters
     ----------
@@ -394,48 +367,40 @@ def head_pose_points(img, rotation_vector, translation_vector, camera_matrix):
     rear_size = 1
     rear_depth = 0
     front_size = img.shape[1]
-    front_depth = front_size*2
+    front_depth = front_size * 2
     val = [rear_size, rear_depth, front_size, front_depth]
-    point_2d = get_2d_points(img, rotation_vector,
-                             translation_vector, camera_matrix, val)
-    y = (point_2d[5] + point_2d[8])//2
+    point_2d = get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val)
+    y = (point_2d[5] + point_2d[8]) // 2
     x = point_2d[2]
 
     return (x, y)
 
 
 def load_darknet_weights(model, weights_file):
-    '''
+    """
     Helper function used to load darknet weights.
 
     :param model: Object of the Yolo v3 model
     :param weights_file: Path to the file with Yolo V3 weights
-    '''
+    """
 
     # Open the weights file
-    wf = open(weights_file, 'rb')
+    wf = open(weights_file, "rb")
     major, minor, revision, seen, _ = np.fromfile(wf, dtype=np.int32, count=5)
 
     # Define names of the Yolo layers (just for a reference)
-    layers = ['yolo_darknet',
-              'yolo_conv_0',
-              'yolo_output_0',
-              'yolo_conv_1',
-              'yolo_output_1',
-              'yolo_conv_2',
-              'yolo_output_2']
+    layers = ["yolo_darknet", "yolo_conv_0", "yolo_output_0", "yolo_conv_1", "yolo_output_1", "yolo_conv_2", "yolo_output_2"]
 
     for layer_name in layers:
         sub_model = model.get_layer(layer_name)
         for i, layer in enumerate(sub_model.layers):
 
-            if not layer.name.startswith('conv2d'):
+            if not layer.name.startswith("conv2d"):
                 continue
 
             # Handles the special, custom Batch normalization layer
             batch_norm = None
-            if i + 1 < len(sub_model.layers) and \
-                    sub_model.layers[i + 1].name.startswith('batch_norm'):
+            if i + 1 < len(sub_model.layers) and sub_model.layers[i + 1].name.startswith("batch_norm"):
                 batch_norm = sub_model.layers[i + 1]
 
             filters = layer.filters
@@ -446,18 +411,15 @@ def load_darknet_weights(model, weights_file):
                 conv_bias = np.fromfile(wf, dtype=np.float32, count=filters)
             else:
                 # darknet [beta, gamma, mean, variance]
-                bn_weights = np.fromfile(
-                    wf, dtype=np.float32, count=4 * filters)
+                bn_weights = np.fromfile(wf, dtype=np.float32, count=4 * filters)
                 # tf [gamma, beta, mean, variance]
                 bn_weights = bn_weights.reshape((4, filters))[[1, 0, 2, 3]]
 
             # darknet shape (out_dim, in_dim, height, width)
             conv_shape = (filters, in_dim, size, size)
-            conv_weights = np.fromfile(
-                wf, dtype=np.float32, count=np.product(conv_shape))
+            conv_weights = np.fromfile(wf, dtype=np.float32, count=np.product(conv_shape))
             # tf shape (height, width, in_dim, out_dim)
-            conv_weights = conv_weights.reshape(
-                conv_shape).transpose([2, 3, 1, 0])
+            conv_weights = conv_weights.reshape(conv_shape).transpose([2, 3, 1, 0])
 
             if batch_norm is None:
                 layer.set_weights([conv_weights, conv_bias])
@@ -465,18 +427,18 @@ def load_darknet_weights(model, weights_file):
                 layer.set_weights([conv_weights])
                 batch_norm.set_weights(bn_weights)
 
-    assert len(wf.read()) == 0, 'failed to read all data'
+    assert len(wf.read()) == 0, "failed to read all data"
     wf.close()
 
 
 def draw_outputs(img, outputs, class_names):
-    '''
+    """
     Helper, util, function that draws predictons on the image.
 
     :param img: Loaded image
     :param outputs: YoloV3 predictions
     :param class_names: list of all class names found in the dataset
-    '''
+    """
     boxes, objectness, classes, nums = outputs
     boxes, objectness, classes, nums = boxes[0], objectness[0], classes[0], nums[0]
     wh = np.flip(img.shape[0:2])
@@ -484,10 +446,9 @@ def draw_outputs(img, outputs, class_names):
         x1y1 = tuple((np.array(boxes[i][0:2]) * wh).astype(np.int32))
         x2y2 = tuple((np.array(boxes[i][2:4]) * wh).astype(np.int32))
         img = cv2.rectangle(img, x1y1, x2y2, (255, 0, 0), 2)
-        img = cv2.putText(img, '{} {:.4f}'.format(
-            class_names[int(classes[i])], objectness[i]),
-            x1y1, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 2)
+        img = cv2.putText(img, "{} {:.4f}".format(class_names[int(classes[i])], objectness[i]), x1y1, cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255), 2)
     return img
+
 
 # yolo_anchors = np.array([(10, 13), (16, 30), (33, 23), (30, 61), (62, 45),
 #                          (59, 119), (116, 90), (156, 198), (373, 326)],
@@ -497,7 +458,7 @@ def draw_outputs(img, outputs, class_names):
 
 
 def DarknetConv(x, filters, kernel_size, strides=1, batch_norm=True):
-    '''
+    """
     Call this function to define a single Darknet convolutional layer
 
     :param x: inputs
@@ -505,18 +466,16 @@ def DarknetConv(x, filters, kernel_size, strides=1, batch_norm=True):
     :param kernel_size: Size of kernel in the Conv layer
     :param strides: Conv layer strides
     :param batch_norm: Whether or not to use the custom batch norm layer.
-    '''
+    """
     # Image padding
     if strides == 1:
-        padding = 'same'
+        padding = "same"
     else:
         x = ZeroPadding2D(((1, 0), (1, 0)))(x)  # top left half-padding
-        padding = 'valid'
+        padding = "valid"
 
     # Defining the Conv layer
-    x = Conv2D(filters=filters, kernel_size=kernel_size,
-               strides=strides, padding=padding,
-               use_bias=not batch_norm, kernel_regularizer=l2(0.0005))(x)
+    x = Conv2D(filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, use_bias=not batch_norm, kernel_regularizer=l2(0.0005))(x)
 
     if batch_norm:
         x = BatchNormalization()(x)
@@ -525,12 +484,12 @@ def DarknetConv(x, filters, kernel_size, strides=1, batch_norm=True):
 
 
 def DarknetResidual(x, filters):
-    '''
+    """
     Call this function to define a single DarkNet Residual layer
 
     :param x: inputs
     :param filters: number of filters in each Conv layer.
-    '''
+    """
     prev = x
     x = DarknetConv(x, filters // 2, 1)
     x = DarknetConv(x, filters, 3)
@@ -539,13 +498,13 @@ def DarknetResidual(x, filters):
 
 
 def DarknetBlock(x, filters, blocks):
-    '''
+    """
     Call this function to define a single DarkNet Block (made of multiple Residual layers)
 
     :param x: inputs
     :param filters: number of filters in each Residual layer
     :param blocks: number of Residual layers in the block
-    '''
+    """
     x = DarknetConv(x, filters, 3, strides=2)
     for _ in range(blocks):
         x = DarknetResidual(x, filters)
@@ -553,9 +512,9 @@ def DarknetBlock(x, filters, blocks):
 
 
 def Darknet(name=None):
-    '''
+    """
     The main function that creates the whole DarkNet.
-    '''
+    """
     x = inputs = Input([None, None, 3])
     x = DarknetConv(x, 32, 3)
     x = DarknetBlock(x, 64, 1)
@@ -567,12 +526,13 @@ def Darknet(name=None):
 
 
 def YoloConv(filters, name=None):
-    '''
+    """
     Call this function to define the Yolo Conv layer.
 
     :param flters: number of filters for the conv layer
     :param name: name of the layer
-    '''
+    """
+
     def yolo_conv(x_in):
         if isinstance(x_in, tuple):
             inputs = Input(x_in[0].shape[1:]), Input(x_in[1].shape[1:])
@@ -591,42 +551,43 @@ def YoloConv(filters, name=None):
         x = DarknetConv(x, filters * 2, 3)
         x = DarknetConv(x, filters, 1)
         return Model(inputs, x, name=name)(x_in)
+
     return yolo_conv
 
 
 def YoloOutput(filters, anchors, classes, name=None):
-    '''
+    """
     This function defines outputs for the Yolo V3. (Creates output projections)
 
     :param filters: number of filters for the conv layer
     :param anchors: anchors
     :param classes: list of classes in a dataset
     :param name: name of the layer
-    '''
+    """
+
     def yolo_output(x_in):
         x = inputs = Input(x_in.shape[1:])
         x = DarknetConv(x, filters * 2, 3)
         x = DarknetConv(x, anchors * (classes + 5), 1, batch_norm=False)
-        x = Lambda(lambda x: tf.reshape(x, (-1, tf.shape(x)[1], tf.shape(x)[2],
-                                            anchors, classes + 5)))(x)
+        x = Lambda(lambda x: tf.reshape(x, (-1, tf.shape(x)[1], tf.shape(x)[2], anchors, classes + 5)))(x)
         return tf.keras.Model(inputs, x, name=name)(x_in)
+
     return yolo_output
 
 
 def yolo_boxes(pred, anchors, classes):
-    '''
+    """
     Call this function to get bounding boxes from network predictions
 
     :param pred: Yolo predictions
     :param anchors: anchors
     :param classes: List of classes from the dataset
-    '''
+    """
 
     # pred: (batch_size, grid, grid, anchors, (x, y, w, h, obj, ...classes))
     grid_size = tf.shape(pred)[1]
     # Extract box coortinates from prediction vectors
-    box_xy, box_wh, objectness, class_probs = tf.split(
-        pred, (2, 2, 1, classes), axis=-1)
+    box_xy, box_wh, objectness, class_probs = tf.split(pred, (2, 2, 1, classes), axis=-1)
 
     # Normalize coortinates
     box_xy = tf.sigmoid(box_xy)
@@ -638,8 +599,7 @@ def yolo_boxes(pred, anchors, classes):
     grid = tf.meshgrid(tf.range(grid_size), tf.range(grid_size))
     grid = tf.expand_dims(tf.stack(grid, axis=-1), axis=2)  # [gx, gy, 1, 2]
 
-    box_xy = (box_xy + tf.cast(grid, tf.float32)) / \
-        tf.cast(grid_size, tf.float32)
+    box_xy = (box_xy + tf.cast(grid, tf.float32)) / tf.cast(grid_size, tf.float32)
     box_wh = tf.exp(box_wh) * anchors
 
     box_x1y1 = box_xy - box_wh / 2
@@ -665,12 +625,11 @@ def yolo_nms(outputs, anchors, masks, classes):
     scores = confidence * class_probs
     boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
         boxes=tf.reshape(bbox, (tf.shape(bbox)[0], -1, 1, 4)),
-        scores=tf.reshape(
-            scores, (tf.shape(scores)[0], -1, tf.shape(scores)[-1])),
+        scores=tf.reshape(scores, (tf.shape(scores)[0], -1, tf.shape(scores)[-1])),
         max_output_size_per_class=100,
         max_total_size=100,
         iou_threshold=0.5,
-        score_threshold=0.6
+        score_threshold=0.6,
     )
 
     return boxes, scores, classes, valid_detections
@@ -678,36 +637,30 @@ def yolo_nms(outputs, anchors, masks, classes):
 
 def YoloV3(size=None, channels=3, classes=80):
 
-    anchors = np.array([(10, 13), (16, 30), (33, 23), (30, 61), (62, 45),
-                        (59, 119), (116, 90), (156, 198), (373, 326)],
-                       np.float32) / 416
+    anchors = np.array([(10, 13), (16, 30), (33, 23), (30, 61), (62, 45), (59, 119), (116, 90), (156, 198), (373, 326)], np.float32) / 416
 
     masks = np.array([[6, 7, 8], [3, 4, 5], [0, 1, 2]])
 
-    x = inputs = Input([size, size, channels], name='input')
+    x = inputs = Input([size, size, channels], name="input")
 
-    x_36, x_61, x = Darknet(name='yolo_darknet')(x)
+    x_36, x_61, x = Darknet(name="yolo_darknet")(x)
 
-    x = YoloConv(512, name='yolo_conv_0')(x)
-    output_0 = YoloOutput(512, len(masks[0]), classes, name='yolo_output_0')(x)
+    x = YoloConv(512, name="yolo_conv_0")(x)
+    output_0 = YoloOutput(512, len(masks[0]), classes, name="yolo_output_0")(x)
 
-    x = YoloConv(256, name='yolo_conv_1')((x, x_61))
-    output_1 = YoloOutput(256, len(masks[1]), classes, name='yolo_output_1')(x)
+    x = YoloConv(256, name="yolo_conv_1")((x, x_61))
+    output_1 = YoloOutput(256, len(masks[1]), classes, name="yolo_output_1")(x)
 
-    x = YoloConv(128, name='yolo_conv_2')((x, x_36))
-    output_2 = YoloOutput(128, len(masks[2]), classes, name='yolo_output_2')(x)
+    x = YoloConv(128, name="yolo_conv_2")((x, x_36))
+    output_2 = YoloOutput(128, len(masks[2]), classes, name="yolo_output_2")(x)
 
-    boxes_0 = Lambda(lambda x: yolo_boxes(x, anchors[masks[0]], classes),
-                     name='yolo_boxes_0')(output_0)
-    boxes_1 = Lambda(lambda x: yolo_boxes(x, anchors[masks[1]], classes),
-                     name='yolo_boxes_1')(output_1)
-    boxes_2 = Lambda(lambda x: yolo_boxes(x, anchors[masks[2]], classes),
-                     name='yolo_boxes_2')(output_2)
+    boxes_0 = Lambda(lambda x: yolo_boxes(x, anchors[masks[0]], classes), name="yolo_boxes_0")(output_0)
+    boxes_1 = Lambda(lambda x: yolo_boxes(x, anchors[masks[1]], classes), name="yolo_boxes_1")(output_1)
+    boxes_2 = Lambda(lambda x: yolo_boxes(x, anchors[masks[2]], classes), name="yolo_boxes_2")(output_2)
 
-    outputs = Lambda(lambda x: yolo_nms(x, anchors, masks, classes),
-                     name='yolo_nms')((boxes_0[:3], boxes_1[:3], boxes_2[:3]))
+    outputs = Lambda(lambda x: yolo_nms(x, anchors, masks, classes), name="yolo_nms")((boxes_0[:3], boxes_1[:3], boxes_2[:3]))
 
-    return Model(inputs, outputs, name='yolov3')
+    return Model(inputs, outputs, name="yolov3")
 
 
 # eye tracker
@@ -736,16 +689,16 @@ def eye_on_mask(mask, side, shape):
     points = np.array(points, dtype=np.int32)
     mask = cv2.fillConvexPoly(mask, points, 255)
     l = points[0][0]
-    t = (points[1][1]+points[2][1])//2
+    t = (points[1][1] + points[2][1]) // 2
     r = points[3][0]
-    b = (points[4][1]+points[5][1])//2
+    b = (points[4][1] + points[5][1]) // 2
     return mask, [l, t, r, b]
 
 
 def find_eyeball_position(end_points, cx, cy):
     """Find and return the eyeball positions, i.e. left or right or top or normal"""
-    x_ratio = (end_points[0] - cx)/(cx - end_points[2])
-    y_ratio = (cy - end_points[1])/(end_points[3] - cy)
+    x_ratio = (end_points[0] - cx) / (cx - end_points[2])
+    y_ratio = (cy - end_points[1]) / (end_points[3] - cy)
     if x_ratio > 3:
         return 1
     elif x_ratio < 0.33:
@@ -783,13 +736,12 @@ def contouring(thresh, mid, img, end_points, right=False):
             3 for up
 
     """
-    cnts, _ = cv2.findContours(
-        thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    cnts, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     try:
         cnt = max(cnts, key=cv2.contourArea)
         M = cv2.moments(cnt)
-        cx = int(M['m10']/M['m00'])
-        cy = int(M['m01']/M['m00'])
+        cx = int(M["m10"] / M["m00"])
+        cy = int(M["m01"] / M["m00"])
         if right:
             cx += mid
         cv2.circle(img, (cx, cy), 4, (0, 0, 255), 2)
@@ -841,19 +793,19 @@ def print_eye_pos(img, left, right):
     """
     eye_logger = []
     if left == right and left != 0:
-        text = ''
+        text = ""
         if left == 1:
             # print('Looking left')
             # text = 'Looking left'
-            eye_logger.append('looking left')
+            eye_logger.append("looking left")
         elif left == 2:
             # print('Looking right')
             # text = 'Looking right'
-            eye_logger.append('looking right')
+            eye_logger.append("looking right")
         elif left == 3:
             # print('Looking up')
             # text = 'Looking up'
-            eye_logger.append('looking up')
+            eye_logger.append("looking up")
         # font = cv2.FONT_HERSHEY_SIMPLEX
         # cv2.putText(img, text, (30, 30), font,1, (0, 255, 255), 2, cv2.LINE_AA)
     return eye_logger
