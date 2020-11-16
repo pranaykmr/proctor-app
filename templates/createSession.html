@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
-
-<head lang="en">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="ProcSmart">
-    <meta name="author" content="Pranay Kumar Verma">
+  <head lang="en">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="description" content="ProcSmart" />
+    <meta name="author" content="Pranay Kumar Verma" />
     <title>ProcSmart</title>
     <!--<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">-->
-    <link href="../static/css/bootstrap.css" rel="stylesheet">
-    <link href="../static/css/app.css" rel="stylesheet">
+    <link href="../static/css/bootstrap.css" rel="stylesheet" />
+    <link href="../static/css/app.css" rel="stylesheet" />
+  </head>
 
-</head>
-
-<body class="hideSlideMenu">
-
+  <body class="hideSlideMenu">
     <nav class="slideMenu">
-        <!-- Login information container -->
-        <div class="loginInfo">
-            <div class="snapHolder"><img src="../static/imgs/img1.png" /></div>
-            <div class="loginDetail">
-                <h5>Admin Name</h5>
-                <p>Admin<br>Admin id: std</p>
-            </div>
+      <!-- Login information container -->
+      <div class="loginInfo">
+        <div class="snapHolder"><img src="../static/imgs/img1.png" /></div>
+        <div class="loginDetail">
+          <h5>Admin Name</h5>
+          <p>Admin<br />Admin id: std</p>
         </div>
-        <!-- Citizen based navigation -->
-        <!-- <ul class="nav" id="citizenNav">
+      </div>
+      <!-- Citizen based navigation -->
+      <!-- <ul class="nav" id="citizenNav">
         <li class="disable"><a href="#">Medicine</a></li>
         <li><a href="serviceOverview.html">Service Overview <b class="semiDeveloped">&#9679;</b></a></li>
         <li class="disable">
@@ -41,40 +41,49 @@
         <li class="disable"><a href="#">Notes</a></li>
         <li><a href="citPlan.html">Citizen Plan <b class="semiDeveloped">&#9679;</b></a></li>
     </ul> -->
-        <!--<div class="nav" id="citizenNav"></div>-->
-        <!-- Application based navigation -->
-        <ul class="nav" id="appNav">
-            <li>
-                <a href="createSession.html"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
-            </li>
-            <li>
-                <a href="addStudent.html"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
-            </li>
-            <li>
-                <a href="sessionListAdmin.html"><i class="glyphicon glyphicon-search"></i> Session List</a>
-            </li>
-            <li>
-                <a href="studentList.html"><i class="glyphicon glyphicon-comment"></i> Student List</a>
-            </li>
-            <li>
-                <a href="indexAdmin.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
-            </li>
-        </ul>
+      <!--<div class="nav" id="citizenNav"></div>-->
+      <!-- Application based navigation -->
+      <ul class="nav" id="appNav">
+        <li>
+          <a href="createSession.html"
+            ><i class="glyphicon glyphicon-duplicate"></i> Create Session</a
+          >
+        </li>
+        <li>
+          <a href="addStudent.html"
+            ><i class="glyphicon glyphicon-duplicate"></i> Add Student</a
+          >
+        </li>
+        <li>
+          <a href="sessionListAdmin.html"
+            ><i class="glyphicon glyphicon-search"></i> Session List</a
+          >
+        </li>
+        <li>
+          <a href="studentList.html"
+            ><i class="glyphicon glyphicon-comment"></i> Student List</a
+          >
+        </li>
+        <li>
+          <a href="indexAdmin.html"
+            ><i class="glyphicon glyphicon-log-out"></i> Logout</a
+          >
+        </li>
+      </ul>
     </nav>
 
     <header>
-        <div class="cntWrap clearfix">
-            <div class="headLeft">
-                <a href="#" id="tglNav"></a>
-                <span class="linkDvdr"></span>
-                <!-- <a href="colleagueVisit.html" id="back"></a> -->
-            </div>
-            <div class="headRight">
-            </div>
-            <div class="headTitle">
-                <h3>Create Session</h3>
-            </div>
+      <div class="cntWrap clearfix">
+        <div class="headLeft">
+          <a href="#" id="tglNav"></a>
+          <span class="linkDvdr"></span>
+          <!-- <a href="colleagueVisit.html" id="back"></a> -->
         </div>
+        <div class="headRight"></div>
+        <div class="headTitle">
+          <h3>Create Session</h3>
+        </div>
+      </div>
     </header>
 
     <!-- Citizen context bar -->
@@ -94,74 +103,118 @@
 </a> -->
 
     <div id="container">
-
-
-        <section>
-            <div class="cntWrap">
-                <h5>Create Session</h5>
-                <ul class="list">
-                    <li>
-                        <div>
-                            <form id="addStudent">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="startdate" class="control-label">Start Date</label>
-                                            <input type="date" class="form-control" id="firstName"
-                                                name="searchCitizenFormInput" placeholder="Enter Start Date">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="enddate" class="control-label">End Date</label>
-                                            <input type="date" class="form-control" id="firstName"
-                                                name="searchCitizenFormInput" placeholder="Enter End Date">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="uid" class="control-label">Enter Session Name</label>
-                                            <input type="text" class="form-control" id="citCPR"
-                                                name="searchCitizenFormInput" placeholder="Enter Session Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-6">
-                                        <div class="form-group">
-                                            <label for="street" class="control-label">Session Notes</label>
-                                            <input type="text" class="form-control" id="street"
-                                                name="searchCitizenFormInput">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="alert alert-danger medium" style="display: none">Please fill at
-                                            least
-                                            one search criteria.
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="text-right">
-                            <button type="button" class="mBtn cancelBtn disableBtn" id="clearForm">Clear</button>
-                            <button type="button" class="mBtn" id="searchResource" data-toggle="modal"
-                                data-target="#searchCit"><a href="sessionListAdmin.html" class='mtbn'
-                                    style="color : white">Create</a>
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </section><!-- main contianer div ended -->
+      <section>
+        <div class="cntWrap">
+          <h5>Create Session</h5>
+          <ul class="list">
+            <li>
+              <div>
+                <form id="addStudent">
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                      <div class="form-group">
+                        <label for="startdate" class="control-label"
+                          >Start Date</label
+                        >
+                        <input
+                          type="datetime-local"
+                          class="form-control"
+                          id="firstName"
+                          name="searchCitizenFormInput"
+                          placeholder="Enter Start Date"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                      <div class="form-group">
+                        <label for="enddate" class="control-label"
+                          >End Date</label
+                        >
+                        <input
+                          type="datetime-local"
+                          class="form-control"
+                          id="firstName"
+                          name="searchCitizenFormInput"
+                          placeholder="Enter End Date"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                      <div class="form-group">
+                        <label for="uid" class="control-label"
+                          >Enter Session Name</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="citCPR"
+                          name="searchCitizenFormInput"
+                          placeholder="Enter Session Name"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                      <div class="form-group">
+                        <label for="street" class="control-label"
+                          >Session Notes</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="street"
+                          name="searchCitizenFormInput"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <div
+                        class="alert alert-danger medium"
+                        style="display: none"
+                      >
+                        Please fill at least one search criteria.
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+            <li>
+              <div class="text-right">
+                <button
+                  type="button"
+                  class="mBtn cancelBtn disableBtn"
+                  id="clearForm"
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  class="mBtn"
+                  id="searchResource"
+                  data-toggle="modal"
+                  data-target="#searchCit"
+                >
+                  <a
+                    href="sessionListAdmin.html"
+                    class="mtbn"
+                    style="color: white"
+                    >Create</a
+                  >
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <!-- main contianer div ended -->
     </div>
 
     <footer>
-        <!--<div class="cntWrap">
+      <!--<div class="cntWrap">
             <div class="footerBtn clearfix">
                 <a href="#" class="mBtn">Save</a>
             </div>
@@ -175,6 +228,5 @@
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/autosize.min.js"></script>
     <script src="../static/js/structure.js"></script>
-</body>
-
+  </body>
 </html>
