@@ -34,6 +34,7 @@ def home():
 def sessionList():
     return render_template('sessionList.html')
 
+@app.route('/admin')
 @app.route('/indexAdmin.html')
 def indexAdmin():
     return render_template('indexAdmin.html')
