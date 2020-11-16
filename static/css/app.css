@@ -1531,3 +1531,9 @@ li.tblRow .cancelSearch:hover { color: #0096bb;}
 .sender-list {
     display: inline-block; vertical-align: middle;
 }
+
+.featureImg{
+    display: block;
+    height: 100%;
+    width: 100%;
+}
