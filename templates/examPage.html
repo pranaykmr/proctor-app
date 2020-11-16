@@ -82,12 +82,12 @@
 </a> -->
 
     <div id="container">
-
-
         <section>
-            <div class="cntWrap">
-                Content Goes Here
-
+            <div class="cntWrap" style=" text-align: center; padding-top: 25px;">
+                <!-- <h3>Welcome To Exam Session</h3> -->
+                <h4>You may minimize the window and proceed with your exam. ALL THE BEST!!!</h4>
+                <br/>
+                <img src="{{ url_for('run_model') }}" />
             </div>
         </section><!-- main contianer div ended -->
     </div>
@@ -107,6 +107,23 @@
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/autosize.min.js"></script>
     <script src="../static/js/structure.js"></script>
+
+    <!-- <script type="text/javascript">
+        $(document).ready(function(){
+            debugger;
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            })
+                .then(function (stream) {
+                    // console.log('Camera & Mic Access Granted')
+                })
+                .catch(function (err) {
+                    // console.log(err)
+                    // window.location.href = 'sessionList.html';
+                });
+        });
+    </script> -->
 </body>
 
 </html>
