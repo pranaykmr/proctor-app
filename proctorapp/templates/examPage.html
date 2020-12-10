@@ -21,8 +21,8 @@
         <div class="loginInfo">
             <div class="snapHolder"><img src="../static/imgs/img1.png" /></div>
             <div class="loginDetail">
-                <h5>Student Name</h5>
-                <p>Student<br>User id: std</p>
+                <h5>{{data.user.name}}</h5>
+                <p>{{ 'Admin' if data.user.isAdmin else 'Student' }}<br>User id: {{data.user.id}}</p>
             </div>
         </div>
         <!-- Citizen based navigation -->
@@ -86,7 +86,7 @@
             <div class="cntWrap" style=" text-align: center; padding-top: 25px;">
                 <!-- <h3>Welcome To Exam Session</h3> -->
                 <h4>You may minimize the window and proceed with your exam. ALL THE BEST!!!</h4>
-                <br/>
+                <br />
                 <img src="{{ url_for('run_model') }}" />
             </div>
         </section><!-- main contianer div ended -->
