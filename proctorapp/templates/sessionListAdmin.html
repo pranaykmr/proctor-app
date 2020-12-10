@@ -104,7 +104,7 @@
                                                 placeholder="Search Citizen by Name"></div>
                     <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
                 </li> -->
-                    <li class="link">
+                    <!-- <li class="link">
                         <a href="dummy.html">
                             <div class="nameCPR">OOD Exam</div>
                             <span class="medium">November 16th 6:00 pm - 8:00 pm</span>
@@ -121,7 +121,15 @@
                             <div class="nameCPR">ANN Exam</div>
                             <span class="medium">November 18th 6:00 pm - 8:00 pm</span>
                         </a>
+                    </li> -->
+                    {% for session in data.sessions %}
+                    <li class="link">
+                        <a href="examPage.html">
+                            <div class="nameCPR">{{session.sessionName}}</div>
+                            <span class="medium">{{session.date}}</span>
+                        </a>
                     </li>
+                    {% endfor %}
                 </ul>
 
             </div>

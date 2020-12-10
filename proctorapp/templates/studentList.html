@@ -104,7 +104,7 @@
                                 placeholder="Search Student by Name"></div>
                         <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
                     </li>
-                    <li class="link">
+                    <!-- <li class="link">
                         <a href="dummy.html" class="citizen">A</a>
                     </li>
                     <li class="link">
@@ -115,7 +115,12 @@
                     </li>
                     <li class="link">
                         <a href="dummy.html" class="citizen">D</a>
+                    </li> -->
+                    {% for std in data.students %}
+                    <li class="link">
+                        <a href="dummy.html" class="citizen">{{std.name}}</a>
                     </li>
+                    {% endfor %}
                 </ul>
             </div>
         </section><!-- main contianer div ended -->
