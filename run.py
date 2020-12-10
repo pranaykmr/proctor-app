@@ -3,8 +3,8 @@ from flask import Flask, Response, render_template
 import cv2
 import numpy as np
 import math
-from face_detector import get_face_detector, find_faces
-from face_landmarks import get_landmark_model, detect_marks, draw_marks
+from mlmodel.face_detector import get_face_detector, find_faces
+from mlmodel.face_landmarks import get_landmark_model, detect_marks, draw_marks
 import json
 import tensorflow as tf
 from tensorflow.keras import Model
