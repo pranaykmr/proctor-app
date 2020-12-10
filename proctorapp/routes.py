@@ -2,7 +2,8 @@ import cv2
 import json
 import threading
 from flask import Flask, Response, render_template, url_for
-from proctorapp import app
+from proctorapp import app, db
+from proctorapp.models import User
 from proctorapp.forms import RegistrationForm, LoginForm
 from proctorapp.proctoring_models import BaseModel, EyeTracker, Mouth_Opening, Head_Position, Object_Detector
 from flask import request
@@ -68,6 +69,9 @@ def sessionListAdmin():
 
 @app.route("/studentList.html")
 def studentList():
+
+    # get data from Db
+
     return render_template(
         "studentList.html",
         data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}, "students": [{"name": "bahadur"}, {"name": "loda"}, {"name": "chutiya"}]},
@@ -92,6 +96,13 @@ def handle_data_add_student():
     stdId = request.form.get("stdId", "")
     stdEmail = request.form.get("stdEmail", "")
     isAdmin = False
+
+    try:
+        user = User(username=f"{fname}_{lname}", email=stdEmail, password='asd', name=fname+lname, isAdmin=False)
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        print(e)
     return studentList()
 
 

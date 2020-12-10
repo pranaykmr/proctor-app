@@ -7,7 +7,6 @@ from proctorapp.mlmodel.face_landmarks import get_landmark_model, detect_marks, 
 
 class BaseModel():
     def __init__(self, video):
-        # self.video = cv2.VideoCapture(0)
         self.video = video
         self.face_model = get_face_detector()
         self.landmark_model = get_landmark_model()
@@ -48,12 +47,7 @@ class BaseModel():
 
     
 class EyeTracker(BaseModel):
-    # def __init__(self, face_model, landmark_model, kernel, left, right):
-    #     self.face_model = face_model
-    #     self.landmark_model = landmark_model
-    #     self.kernel = kernel
-    #     self.left = left
-    #     self.right = right
+
     def __init__(self, video):
         super().__init__(video)
 
@@ -145,16 +139,10 @@ class EyeTracker(BaseModel):
         if left == right and left != 0:
             text = ''
             if left == 1:
-                # print('Looking left')
-                # text = 'Looking left'
                 eye_logger.append('looking left')
             elif left == 2:
-                # print('Looking right')
-                # text = 'Looking right'
                 eye_logger.append('looking right')
             elif left == 3:
-                # print('Looking up')
-                # text = 'Looking up'
                 eye_logger.append('looking up')
             # font = cv2.FONT_HERSHEY_SIMPLEX
             # cv2.putText(img, text, (30, 30), font,1, (0, 255, 255), 2, cv2.LINE_AA)
@@ -249,28 +237,17 @@ class Head_Position(BaseModel):
             except:
                 ang2 = 90
 
-                # print('div by zero error')
             if ang1 >= 48:
-                # print('Head down')
                 head_pos_logger.append("Head Down")
-                # cv2.putText(img, 'Head down', (30, 30), font, 2, (255, 255, 128), 3)
             elif ang1 <= -48:
-                # print('Head up')
                 head_pos_logger.append("Head Up")
-                # cv2.putText(img, 'Head up', (30, 30), font, 2, (255, 255, 128), 3)
 
             if ang2 >= 48:
-                # print('Head right')
                 head_pos_logger.append("Head Right")
-                # cv2.putText(img, 'Head right', (90, 30), font, 2, (255, 255, 128), 3)
             elif ang2 <= -48:
-                # print('Head left')
                 head_pos_logger.append("Head Left")
-                # cv2.putText(img, 'Head left', (90, 30), font, 2, (255, 255, 128), 3)
         return head_pos_logger
 
-        # cv2.putText(img, str(ang1), tuple(p1), font, 2, (128, 255, 255), 3)
-        # cv2.putText(img, str(ang2), tuple(x1), font, 2, (255, 255, 128), 3)
 
     def head_pose_points(self, img, rotation_vector, translation_vector, camera_matrix):
         """
@@ -363,12 +340,9 @@ class Object_Detector(BaseModel):
                 count += 1
             if int(classes[0][i] == 67):
                 phone_logger.append('Mobile Phone detected')
-                # print('Mobile Phone detected')
         if count == 0:
             phone_logger.append('No person detected')
-            # print('No person detected')
         elif count > 1:
             phone_logger.append('More than one person detected')
-            # print('More than one person detected')
         return phone_logger
     
