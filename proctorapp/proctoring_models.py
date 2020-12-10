@@ -39,11 +39,6 @@ class BaseModel():
         self.d_outer = [0]*5
         self.inner_points = [[61, 67], [62, 66], [63, 65]]
         self.d_inner = [0]*3
-
-        # YoloV3
-        self.yolo = yolov3.YoloV3()
-        yolov3.load_darknet_weights(self.yolo,  './proctorapp/mlmodel/models/yolov3.weights')
-
         # eye tracker
         self.left = [36, 37, 38, 39, 40, 41]
         self.right = [42, 43, 44, 45, 46, 47]
@@ -76,7 +71,7 @@ class EyeTracker(BaseModel):
             eyes = cv2.bitwise_and(img, img, mask=mask)
             mask = (eyes == [0, 0, 0]).all(axis=2)
             eyes[mask] = [255, 255, 255]
-            mid = (shape[42][0] + shape[39][0]) // 2
+            mid = int((shape[42][0] + shape[39][0]) // 2)
             eyes_gray = cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY)
             _, thresh = cv2.threshold(eyes_gray, 50, 255, cv2.THRESH_BINARY)
             thresh = self.process_thresh(thresh)
@@ -344,6 +339,8 @@ class Head_Position(BaseModel):
 class Object_Detector(BaseModel):
     def __init__(self, video):
         super().__init__(video)
+        self.yolo = yolov3.YoloV3()
+        yolov3.load_darknet_weights(self.yolo,  './proctorapp/mlmodel/models/yolov3.weights')
     
     def person_and_phone(self):
         phone_logger = []
@@ -354,8 +351,12 @@ class Object_Detector(BaseModel):
         img = np.expand_dims(img, 0)
         img = img / 255
         class_names = [c.strip() for c in open("./proctorapp/mlmodel/models/classes.TXT").readlines()]
-        yolo_obj = yolov3.YoloV3()
-        boxes, scores, classes, nums = yolo_obj(img)
+        # yolo_obj = yolov3.YoloV3()
+        try:
+            boxes, scores, classes, nums = self.yolo(img)
+        except Exception as e:
+            print(e)
+
         count = 0
         for i in range(nums[0]):
             if int(classes[0][i] == 0):
