@@ -1,5 +1,6 @@
 import cv2
 import json
+import threading
 from flask import Flask, Response, render_template, url_for
 from proctorapp import app
 from proctorapp.forms import RegistrationForm, LoginForm
@@ -61,31 +62,38 @@ def studentList():
 
 @app.route("/examPage.html")
 def examPage():
-    return render_template('examPage.html')
+    return render_template('examPage.html', data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": False}})
 
 @app.route('/run_model')
 def run_model():
+    video = cv2.VideoCapture(0)
+    return Response(invoke_models(video),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+def invoke_models(video):
     try:
-        video = cv2.VideoCapture(0)
         eye_tracker = EyeTracker(video)
         mouth_open = Mouth_Opening(video)
         head_pos = Head_Position(video)
         object_detector = Object_Detector(video)
 
         logger = {'head_logger': [], 'mouth_logger': [], 'phone_logger': [], 'eye_logger': []}
-
+        timer()
         while True:
             logger['head_logger'].extend(head_pos.head_position())
             logger['mouth_logger'].extend(mouth_open.mouth_opening())
-            logger['phone_logger'].extend(object_detector.person_and_phone())
             logger['eye_logger'].extend(eye_tracker.eye_detector())
+            logger['phone_logger'].extend(object_detector.person_and_phone())
             # json_object=json.dumps(logger, indent = 4)
             with open("log.json", "w") as outfile:
                 json.dump(logger, outfile)
-
     except Exception as e:
         print(e)
 
-    # video = cv2.VideoCapture(0)
-    # return Response(base_model(video),
-    #                 mimetype='multipart/x-mixed-replace; boundary=frame')
+def hello():
+    print("hello, world")
+    timer()
+
+def timer():
+    threading.Timer(10.0, hello).start()
