@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="indexBackdrop">
+
+    <div class="indexHeader">
+        <div class="indexWrap">
+            <div
+                style="margin-left: auto;margin-right: auto;display: block;color: #0096bb;font-size: larger;font-weight: 900;padding: 5px;">
+                ProcSmart</div>
+        </div>
+    </div><!-- index header with app logo ends -->
+
+    <div class="center-area">
+        <div class="centered">
+            <div class="loginForm">
+                <form role="form" id="loginVitae", method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <label class="control-label" for="uid">User Name:</label>
+                        <input type="text" class="form-control" id="uid" placeholder="Enter User Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="pwd">Password:</label>
+                        <input type="password" class="form-control" id="pwd" placeholder="Enter Password">
+                    </div>
+
+                    <div class="alert alert-danger medium" style="display: none">
+                        <a href="#" class="close" aria-label="close">&times;</a>User Name required!
+                    </div>
+
+                    <div class="btnWrap">
+                        <button type="button" class="btn-block mBtn" id="login">Login</button>
+                    </div>
+                </form>
+                <div class="centered">
+                    <small class="text-muted">
+                        Are you a student? <a class="ml-2" href="{{ url_for('home') }}">Click Here</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div><!-- centrally aligned login form wrapper ends-->
+</div>
+
+
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/autosize.min.js"></script>
+<script src="../static/js/structure.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $('#login').click(function () {
+            if (!$('#uid').val()) {
+                $('.alert').fadeIn();
+            } else {
+                window.location.href = 'studentList.html';
+            }
+        });
+
+        $('.alert > .close').click(function () {
+            $('.alert').fadeOut();
+        })
+
+        $("#uid").keyup(function (event) {
+            if (event.keyCode == 13) {
+                $("#login").click();
+            }
+        });
+
+
+    });
+</script>
+{% endblock content %}
