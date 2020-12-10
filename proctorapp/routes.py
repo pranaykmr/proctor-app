@@ -53,12 +53,25 @@ def dummy():
 
 @app.route("/sessionListAdmin.html")
 def sessionListAdmin():
-    return render_template("sessionListAdmin.html", data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}})
+    return render_template(
+        "sessionListAdmin.html",
+        data={
+            "user": {"name": "Pranay", "id": "prverma", "isAdmin": True},
+            "sessions": [
+                {"sessionName": "OOD Exam", "date": "November 16th 6:00 pm - 8:00 pm"},
+                {"sessionName": "ANN Exam", "date": "November 17th 6:00 pm - 8:00 pm"},
+                {"sessionName": "NLP Exam", "date": "November 18th 6:00 pm - 8:00 pm"},
+            ],
+        },
+    )
 
 
 @app.route("/studentList.html")
 def studentList():
-    return render_template("studentList.html", data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}})
+    return render_template(
+        "studentList.html",
+        data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}, "students": [{"name": "bahadur"}, {"name": "loda"}, {"name": "chutiya"}]},
+    )
 
 
 @app.route("/examPage.html")
@@ -78,7 +91,8 @@ def handle_data_add_student():
     lname = request.form.get("lname", "")
     stdId = request.form.get("stdId", "")
     stdEmail = request.form.get("stdEmail", "")
-    return render_template("studentList.html", data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}})
+    isAdmin = False
+    return studentList()
 
 
 @app.route("/handle_data_create_session", methods=["GET", "POST"])
@@ -87,7 +101,7 @@ def handle_data_create_session():
     endDate = request.form.get("endDate", "")
     sessionName = request.form.get("sessionName", "")
     sessionNotes = request.form.get("sessionNotes", "")
-    return render_template("sessionListAdmin.html", data={"user": {"name": "Pranay", "id": "prverma", "isAdmin": True}})
+    return sessionListAdmin()
 
 
 def invoke_models(video):
