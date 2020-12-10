@@ -1,6 +1,9 @@
-from flask import render_template, url_for
+import cv2
+import json
+from flask import Flask, Response, render_template, url_for
 from proctorapp import app
 from proctorapp.forms import RegistrationForm, LoginForm
+from proctorapp.proctoring_models import BaseModel, EyeTracker, Mouth_Opening, Head_Position, Object_Detector
 
 
 @app.route("/")
@@ -58,10 +61,31 @@ def studentList():
 
 @app.route("/examPage.html")
 def examPage():
-    return render_template("examPage.html")
+    return render_template('examPage.html')
 
-
-@app.route("/run_model")
+@app.route('/run_model')
 def run_model():
-    video = cv2.VideoCapture(0)
-    return Response(base_model(video), mimetype="multipart/x-mixed-replace; boundary=frame")
+    try:
+        video = cv2.VideoCapture(0)
+        eye_tracker = EyeTracker(video)
+        mouth_open = Mouth_Opening(video)
+        head_pos = Head_Position(video)
+        object_detector = Object_Detector(video)
+
+        logger = {'head_logger': [], 'mouth_logger': [], 'phone_logger': [], 'eye_logger': []}
+
+        while True:
+            logger['head_logger'].extend(head_pos.head_position())
+            logger['mouth_logger'].extend(mouth_open.mouth_opening())
+            logger['phone_logger'].extend(object_detector.person_and_phone())
+            logger['eye_logger'].extend(eye_tracker.eye_detector())
+            # json_object=json.dumps(logger, indent = 4)
+            with open("log.json", "w") as outfile:
+                json.dump(logger, outfile)
+
+    except Exception as e:
+        print(e)
+
+    # video = cv2.VideoCapture(0)
+    # return Response(base_model(video),
+    #                 mimetype='multipart/x-mixed-replace; boundary=frame')

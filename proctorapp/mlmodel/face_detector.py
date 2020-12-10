@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 
 
-def get_face_detector(modelFile="models/res10_300x300_ssd_iter_140000.caffemodel",
-                      configFile="models/deploy.prototxt"):
+def get_face_detector(modelFile="./proctorapp/mlmodel/models/res10_300x300_ssd_iter_140000.caffemodel",
+                      configFile="./proctorapp/mlmodel/models/deploy.prototxt"):
     """
     Get the face detection caffe model of OpenCV's DNN module
 
@@ -20,8 +20,8 @@ def get_face_detector(modelFile="models/res10_300x300_ssd_iter_140000.caffemodel
     model : dnn_Net
 
     """
-    modelFile = "models/res10_300x300_ssd_iter_140000.caffemodel"
-    configFile = "models/deploy.prototxt"
+    modelFile = "./proctorapp/mlmodel/models/res10_300x300_ssd_iter_140000.caffemodel"
+    configFile = "./proctorapp/mlmodel/models/deploy.prototxt"
     model = cv2.dnn.readNetFromCaffe(configFile, modelFile)
     return model
 
