@@ -55,7 +55,7 @@
                 <ul class="list noTitle">
                     {% for session in data.sessions %}
                     <li class="link">
-                        <a href="examPage.html">
+                        <a href="{{url_for('examPage', sessionId=session.id)}}">
                             <div class="nameCPR">{{session.sessionname}}</div>
                             <span class="medium">{{session.startdate.strftime("%m/%d/%Y, %H:%M")}} -
                                 {{session.enddate.strftime("%m/%d/%Y, %H:%M")}}</span>
