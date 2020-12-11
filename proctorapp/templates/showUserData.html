@@ -122,6 +122,17 @@
                             </div>
                         </li>
                     </ul>
+                    <ul class="list">
+                        {% for log in data.logs %}
+                        <li>
+                            <h3>{{log.sessionname}}</h3>
+                            </br>
+                            <span>
+                                {{log.rawData}}
+                            </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </section><!-- main contianer div ended -->
         </form>
