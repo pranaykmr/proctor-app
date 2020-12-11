@@ -1,53 +1,55 @@
 import cv2
 import math
 import numpy as np
+from datetime import datetime
 from proctorapp import yolov3
 from proctorapp.mlmodel.face_detector import get_face_detector, find_faces
 from proctorapp.mlmodel.face_landmarks import get_landmark_model, detect_marks, draw_marks
 
-class BaseModel():
+
+def getCurrentTime():
+    return datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+
+
+class BaseModel:
     def __init__(self, video):
         self.video = video
         self.face_model = get_face_detector()
         self.landmark_model = get_landmark_model()
         self.ret, self.img = self.video.read()
         self.size = self.img.shape
-        self.model_points = np.array([
-            (0.0, 0.0, 0.0),             # Nose tip
-            (0.0, -330.0, -65.0),        # Chin
-            # Left eye left corner
-            (-225.0, 170.0, -135.0),
-            # Right eye right corne
-            (225.0, 170.0, -135.0),
-            # Left Mouth corner
-            (-150.0, -150.0, -125.0),
-            # Right mouth corner
-            (150.0, -150.0, -125.0)
-        ])
+        self.model_points = np.array(
+            [
+                (0.0, 0.0, 0.0),  # Nose tip
+                (0.0, -330.0, -65.0),  # Chin
+                # Left eye left corner
+                (-225.0, 170.0, -135.0),
+                # Right eye right corne
+                (225.0, 170.0, -135.0),
+                # Left Mouth corner
+                (-150.0, -150.0, -125.0),
+                # Right mouth corner
+                (150.0, -150.0, -125.0),
+            ]
+        )
         # Camera internals
         self.focal_length = self.size[1]
-        self.center = (self.size[1]/2, self.size[0]/2)
-        self.camera_matrix = np.array(
-            [[self.focal_length, 0, self.center[0]],
-            [0, self.focal_length, self.center[1]],
-            [0, 0, 1]], dtype="double"
-        )
+        self.center = (self.size[1] / 2, self.size[0] / 2)
+        self.camera_matrix = np.array([[self.focal_length, 0, self.center[0]], [0, self.focal_length, self.center[1]], [0, 0, 1]], dtype="double")
 
         # mouth
         self.outer_points = [[49, 59], [50, 58], [51, 57], [52, 56], [53, 55]]
-        self.d_outer = [0]*5
+        self.d_outer = [0] * 5
         self.inner_points = [[61, 67], [62, 66], [63, 65]]
-        self.d_inner = [0]*3
+        self.d_inner = [0] * 3
         # eye tracker
         self.left = [36, 37, 38, 39, 40, 41]
         self.right = [42, 43, 44, 45, 46, 47]
         self.kernel = np.ones((9, 9), np.uint8)
-        self.logger = {'head_logger': [], 'mouth_logger': [],
-                'phone_logger': [], 'eye_logger': []}
+        self.logger = {"head_logger": [], "mouth_logger": [], "phone_logger": [], "eye_logger": []}
 
-    
+
 class EyeTracker(BaseModel):
-
     def __init__(self, video):
         super().__init__(video)
 
@@ -70,14 +72,10 @@ class EyeTracker(BaseModel):
             _, thresh = cv2.threshold(eyes_gray, 50, 255, cv2.THRESH_BINARY)
             thresh = self.process_thresh(thresh)
 
-            eyeball_pos_left = self.contouring(
-                thresh[:, 0:mid], mid, img, end_points_left)
-            eyeball_pos_right = self.contouring(
-                thresh[:, mid:], mid, img, end_points_right, True)
-            eye_logger.extend(self.print_eye_pos(
-                img, eyeball_pos_left, eyeball_pos_right))
+            eyeball_pos_left = self.contouring(thresh[:, 0:mid], mid, img, end_points_left)
+            eyeball_pos_right = self.contouring(thresh[:, mid:], mid, img, end_points_right, True)
+            eye_logger.extend(self.print_eye_pos(img, eyeball_pos_left, eyeball_pos_right))
         return eye_logger
-
 
     def eye_on_mask(self, mask, side, shape):
         """
@@ -104,20 +102,19 @@ class EyeTracker(BaseModel):
         points = np.array(points, dtype=np.int32)
         mask = cv2.fillConvexPoly(mask, points, 255)
         l = points[0][0]
-        t = (points[1][1]+points[2][1])//2
+        t = (points[1][1] + points[2][1]) // 2
         r = points[3][0]
-        b = (points[4][1]+points[5][1])//2
+        b = (points[4][1] + points[5][1]) // 2
         return mask, [l, t, r, b]
 
     def contouring(self, thresh, mid, img, end_points, right=False):
-    
-        cnts, _ = cv2.findContours(
-            thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+        cnts, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         try:
             cnt = max(cnts, key=cv2.contourArea)
             M = cv2.moments(cnt)
-            cx = int(M['m10']/M['m00'])
-            cy = int(M['m01']/M['m00'])
+            cx = int(M["m10"] / M["m00"])
+            cy = int(M["m01"] / M["m00"])
             if right:
                 cx += mid
             cv2.circle(img, (cx, cy), 4, (0, 0, 255), 2)
@@ -125,7 +122,6 @@ class EyeTracker(BaseModel):
             return pos
         except:
             pass
-
 
     def process_thresh(self, thresh):
         thresh = cv2.erode(thresh, None, iterations=2)
@@ -137,21 +133,21 @@ class EyeTracker(BaseModel):
     def print_eye_pos(self, img, left, right):
         eye_logger = []
         if left == right and left != 0:
-            text = ''
+            text = ""
             if left == 1:
-                eye_logger.append('looking left')
+                eye_logger.append({"exception": "looking left", "timestamp": getCurrentTime()})
             elif left == 2:
-                eye_logger.append('looking right')
+                eye_logger.append({"exception": "looking right", "timestamp": getCurrentTime()})
             elif left == 3:
-                eye_logger.append('looking up')
+                eye_logger.append({"exception": "looking up", "timestamp": getCurrentTime()})
             # font = cv2.FONT_HERSHEY_SIMPLEX
             # cv2.putText(img, text, (30, 30), font,1, (0, 255, 255), 2, cv2.LINE_AA)
         return eye_logger
 
     def find_eyeball_position(self, end_points, cx, cy):
         """Find and return the eyeball positions, i.e. left or right or top or normal"""
-        x_ratio = (end_points[0] - cx)/(cx - end_points[2])
-        y_ratio = (cy - end_points[1])/(end_points[3] - cy)
+        x_ratio = (end_points[0] - cx) / (cx - end_points[2])
+        y_ratio = (cy - end_points[1]) / (end_points[3] - cy)
         if x_ratio > 3:
             return 1
         elif x_ratio < 0.33:
@@ -161,8 +157,8 @@ class EyeTracker(BaseModel):
         else:
             return 0
 
-class Mouth_Opening(BaseModel):
 
+class Mouth_Opening(BaseModel):
     def __init__(self, video):
         super().__init__(video)
 
@@ -182,12 +178,12 @@ class Mouth_Opening(BaseModel):
                 if self.d_inner[i] + 2 < shape[p2][1] - shape[p1][1]:
                     cnt_inner += 1
             if cnt_outer > 3 and cnt_inner > 2:
-                mouth_logger.append('Mouth open')
+                mouth_logger.append({"exception": "Mouth Open", "timestamp": getCurrentTime()})
                 # print('Mouth open')
         return mouth_logger
 
-class Head_Position(BaseModel):
 
+class Head_Position(BaseModel):
     def __init__(self, video):
         super().__init__(video)
 
@@ -199,59 +195,62 @@ class Head_Position(BaseModel):
         for face in faces:
             marks = detect_marks(img, self.landmark_model, face)
             # mark_detector.draw_marks(img, marks, color=(0, 255, 0))
-            image_points = np.array([
-                                    marks[30],     # Nose tip
-                                    marks[8],     # Chin
-                                    marks[36],     # Left eye left corner
-                                    marks[45],     # Right eye right corne
-                                    marks[48],     # Left Mouth corner
-                                    marks[54]      # Right mouth corner
-                                    ], dtype="double")
+            image_points = np.array(
+                [
+                    marks[30],  # Nose tip
+                    marks[8],  # Chin
+                    marks[36],  # Left eye left corner
+                    marks[45],  # Right eye right corne
+                    marks[48],  # Left Mouth corner
+                    marks[54],  # Right mouth corner
+                ],
+                dtype="double",
+            )
             dist_coeffs = np.zeros((4, 1))  # Assuming no lens distortion
             (success, rotation_vector, translation_vector) = cv2.solvePnP(
-                self.model_points, image_points, self.camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_UPNP)
+                self.model_points, image_points, self.camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_UPNP
+            )
 
             # Project a 3D point (0, 0, 1000.0) onto the image plane.
             # We use this to draw a line sticking out of the nose
 
-            (nose_end_point2D, jacobian) = cv2.projectPoints(np.array(
-                [(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, self.camera_matrix, dist_coeffs)
+            (nose_end_point2D, jacobian) = cv2.projectPoints(
+                np.array([(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, self.camera_matrix, dist_coeffs
+            )
 
             # for p in image_points:
             #     cv2.circle(img, (int(p[0]), int(p[1])), 3, (0,0,255), -1)
 
             p1 = (int(image_points[0][0]), int(image_points[0][1]))
             p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
-            x1, x2 = self.head_pose_points(
-                img, rotation_vector, translation_vector, self.camera_matrix)
+            x1, x2 = self.head_pose_points(img, rotation_vector, translation_vector, self.camera_matrix)
 
             try:
-                m = (p2[1] - p1[1])/(p2[0] - p1[0])
+                m = (p2[1] - p1[1]) / (p2[0] - p1[0])
                 ang1 = int(math.degrees(math.atan(m)))
             except:
                 ang1 = 90
 
             try:
-                m = (x2[1] - x1[1])/(x2[0] - x1[0])
-                ang2 = int(math.degrees(math.atan(-1/m)))
+                m = (x2[1] - x1[1]) / (x2[0] - x1[0])
+                ang2 = int(math.degrees(math.atan(-1 / m)))
             except:
                 ang2 = 90
 
             if ang1 >= 48:
-                head_pos_logger.append("Head Down")
+                head_pos_logger.append({"exception": "Head Down", "timestamp": getCurrentTime()})
             elif ang1 <= -48:
-                head_pos_logger.append("Head Up")
+                head_pos_logger.append({"exception": "Head Up", "timestamp": getCurrentTime()})
 
             if ang2 >= 48:
-                head_pos_logger.append("Head Right")
+                head_pos_logger.append({"exception": "Head Right", "timestamp": getCurrentTime()})
             elif ang2 <= -48:
-                head_pos_logger.append("Head Left")
+                head_pos_logger.append({"exception": "Head Left", "timestamp": getCurrentTime()})
         return head_pos_logger
-
 
     def head_pose_points(self, img, rotation_vector, translation_vector, camera_matrix):
         """
-        Get the points to estimate head pose sideways    
+        Get the points to estimate head pose sideways
 
         Parameters
         ----------
@@ -273,15 +272,13 @@ class Head_Position(BaseModel):
         rear_size = 1
         rear_depth = 0
         front_size = img.shape[1]
-        front_depth = front_size*2
+        front_depth = front_size * 2
         val = [rear_size, rear_depth, front_size, front_depth]
-        point_2d = self.get_2d_points(img, rotation_vector,
-                                translation_vector, camera_matrix, val)
-        y = (point_2d[5] + point_2d[8])//2
+        point_2d = self.get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val)
+        y = (point_2d[5] + point_2d[8]) // 2
         x = point_2d[2]
 
         return (x, y)
-
 
     def get_2d_points(self, img, rotation_vector, translation_vector, camera_matrix, val):
         """Return the 3D points present as 2D for making annotation box"""
@@ -305,20 +302,17 @@ class Head_Position(BaseModel):
         point_3d = np.array(point_3d, dtype=np.float).reshape(-1, 3)
 
         # Map to 2d img points
-        (point_2d, _) = cv2.projectPoints(point_3d,
-                                        rotation_vector,
-                                        translation_vector,
-                                        camera_matrix,
-                                        dist_coeffs)
+        (point_2d, _) = cv2.projectPoints(point_3d, rotation_vector, translation_vector, camera_matrix, dist_coeffs)
         point_2d = np.int32(point_2d.reshape(-1, 2))
         return point_2d
+
 
 class Object_Detector(BaseModel):
     def __init__(self, video):
         super().__init__(video)
         self.yolo = yolov3.YoloV3()
-        yolov3.load_darknet_weights(self.yolo,  './proctorapp/mlmodel/models/yolov3.weights')
-    
+        yolov3.load_darknet_weights(self.yolo, "./proctorapp/mlmodel/models/yolov3.weights")
+
     def person_and_phone(self):
         phone_logger = []
         ret, image = self.video.read()
@@ -339,10 +333,9 @@ class Object_Detector(BaseModel):
             if int(classes[0][i] == 0):
                 count += 1
             if int(classes[0][i] == 67):
-                phone_logger.append('Mobile Phone detected')
+                phone_logger.append({"exception": "Mobile Phone detected", "timestamp": getCurrentTime()})
         if count == 0:
-            phone_logger.append('No person detected')
+            phone_logger.append({"exception": "No person detected", "timestamp": getCurrentTime()})
         elif count > 1:
-            phone_logger.append('More than one person detected')
+            phone_logger.append({"exception": "More than one person detected", "timestamp": getCurrentTime()})
         return phone_logger
-    

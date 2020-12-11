@@ -6,12 +6,12 @@ from datetime import datetime
 from flask import Flask, Response, render_template, url_for
 from proctorapp import app, db
 from proctorapp.models import User, Session, Logs
-from proctorapp.forms import RegistrationForm, LoginForm
 from proctorapp.proctoring_models import BaseModel, EyeTracker, Mouth_Opening, Head_Position, Object_Detector
 from flask import request
 
 currFlag = True
 session = {}
+
 
 @app.route("/")
 @app.route("/index")
@@ -40,16 +40,17 @@ def render_home(isAdmin=False):
     currFlag = False
     insertLogs()
     global session
-    if 'user' in session and not session['user'].isAdmin:
+    if "user" in session and not session["user"].isAdmin:
         return sessionList()
-    elif 'user' in session and session['user'].isAdmin:
+    elif "user" in session and session["user"].isAdmin:
         return sessionListAdmin()
     else:
         session = {}
-        if(isAdmin):
+        if isAdmin:
             return render_template("indexAdmin.html")
         else:
             return render_template("index.html")
+
 
 @app.route("/logout")
 def logout():
@@ -63,32 +64,30 @@ def logout():
 
 @app.route("/sessionList.html", methods=["POST"])
 def sessionList():
-    if 'user' in session:
-        uname = session['user'].username
-        passwd = session['user'].password
+    if "user" in session:
+        uname = session["user"].username
+        passwd = session["user"].password
     else:
-        uname = request.form.get('uname')
-        passwd = request.form.get('pass')
+        uname = request.form.get("uname")
+        passwd = request.form.get("pass")
 
     user = User.query.filter_by(username=uname, password=passwd).first()
 
     if user:
         data = getSessionData()
-        session['user'] = user
-        return render_template(
-            "sessionList.html",
-            data={"user": session['user'] , "sessions": data})
-    return render_template(url_for('home'))
+        session["user"] = user
+        return render_template("sessionList.html", data={"user": session["user"], "sessions": data})
+    return render_template(url_for("home"))
 
 
 @app.route("/addUser.html")
 def addUser():
-    return render_template("addUser.html", data={"user": session['user']})
+    return render_template("addUser.html", data={"user": session["user"]})
 
 
 @app.route("/createSession.html")
 def createSession():
-    return render_template("createSession.html", data={"user": session['user']})
+    return render_template("createSession.html", data={"user": session["user"]})
 
 
 @app.route("/dummy.html")
@@ -96,22 +95,22 @@ def dummy():
     return render_template("dummy.html")
 
 
-@app.route("/sessionListAdmin.html", methods=['POST'])
+@app.route("/sessionListAdmin.html", methods=["POST"])
 def sessionListAdmin():
-    if 'user' in session:
-        uname = session['user'].username
-        passwd = session['user'].password
+    if "user" in session:
+        uname = session["user"].username
+        passwd = session["user"].password
     else:
-        uname = request.form.get('uname')
-        passwd = request.form.get('pass')
+        uname = request.form.get("uname")
+        passwd = request.form.get("pass")
 
     user = User.query.filter_by(username=uname, password=passwd).first()
 
-    session['user'] = user
+    session["user"] = user
     data = getSessionData()
     return render_template(
         "sessionListAdmin.html",
-        data={"user": session['user'], "sessions": data},
+        data={"user": session["user"], "sessions": data},
     )
 
 
@@ -122,7 +121,7 @@ def studentList():
 
     return render_template(
         "studentList.html",
-        data={"user": session['user'], "students": data.all()},
+        data={"user": session["user"], "students": data.all()},
     )
 
 
@@ -132,7 +131,7 @@ def getSessionData():
 
 @app.route("/examPage.html")
 def examPage():
-    return render_template("examPage.html", data={"user": session['user']})
+    return render_template("examPage.html", data={"user": session["user"]})
 
 
 @app.route("/run_model")
@@ -147,7 +146,7 @@ def handle_data_add_user():
     lname = request.form.get("lname", "")
     userId = request.form.get("userId", "")
     userEmail = request.form.get("userEmail", "")
-    isAdmin = True if request.form.get("isAdmin", False) == 'on' else False
+    isAdmin = True if request.form.get("isAdmin", False) == "on" else False
 
     try:
         user = User(username=f"{userId}", email=userEmail, password="asd", name=f"{fname} {lname}", isAdmin=isAdmin)
