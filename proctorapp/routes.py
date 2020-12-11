@@ -40,12 +40,12 @@ def render_home(isAdmin=False):
             return render_template("index.html")
 
 
-@app.route("/logout", methods=['GET','POST'])
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
     global currFlag
     currFlag = False
 
-    sessionId = request.args.get('sessionId')
+    sessionId = request.args.get("sessionId")
 
     if sessionId:
         insertLogs(sessionId)
@@ -117,8 +117,9 @@ def updateUser():
 def showUserData():
     stdId = request.args.get("studentId")
     user = User.query.filter_by(id=stdId).first()
+    logs = Logs.query.filter_by(userId=stdId).all()
     session["currstdId"] = user
-    return render_template("showUserData.html", data={"user": session["user"], "student": user})
+    return render_template("showUserData.html", data={"user": session["user"], "student": user, "logs": logs})
 
 
 @app.route("/sessionListAdmin.html", methods=["GET", "POST"])
@@ -240,8 +241,14 @@ def insertLogs(sessionId):
         print(e)
     if data:
         try:
-            session = Session.query.filter_by(id=sessionId).first()
-            logs = Logs(rawData=str.encode(json.dumps(data)), userId=session['user'].id, sessionid=session.id, sessionname=session.sessionname, timestamp=datetime.now())
+            sessiondata = Session.query.filter_by(id=sessionId).first()
+            logs = Logs(
+                rawData=str.encode(json.dumps(data)),
+                userId=session["user"].id,
+                sessionid=sessiondata.id,
+                sessionname=sessiondata.sessionname,
+                timestamp=datetime.now(),
+            )
             db.session.add(logs)
             db.session.commit()
         except Exception as e:
