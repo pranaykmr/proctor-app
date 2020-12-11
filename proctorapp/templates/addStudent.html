@@ -25,24 +25,6 @@
                 <p>{{ 'Admin' if data.user.isAdmin else 'Student' }}<br>User id: {{data.user.username}}</p>
             </div>
         </div>
-        <!-- Citizen based navigation -->
-        <!-- <ul class="nav" id="citizenNav">
-        <li class="disable"><a href="#">Medicine</a></li>
-        <li><a href="serviceOverview.html">Service Overview <b class="semiDeveloped">&#9679;</b></a></li>
-        <li class="disable">
-            <a href="#" data-toggle="collapse" data-target="#demo" class="accordNav collapsed">Citizen File</a>
-            <ul class="nav subNav collapse" id="demo">
-                <li class="disable"><a href="cf.html">Citizen File Overview</a></li>
-                <li class="disable"><a href="noteModule.html">Notes</a></li>
-                <li><a href="deadline.html">Deadline</a></li>
-                <li><a href="cf.html">Common Language 3</a></li>
-            </ul>
-        </li>
-        <li class="disable"><a href="#">Notes</a></li>
-        <li><a href="citPlan.html">Citizen Plan <b class="semiDeveloped">&#9679;</b></a></li>
-    </ul> -->
-        <!--<div class="nav" id="citizenNav"></div>-->
-        <!-- Application based navigation -->
         <ul class="nav" id="appNav">
             <li>
                 <a href="{{url_for('createSession')}}"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
@@ -67,7 +49,6 @@
             <div class="headLeft">
                 <a href="#" id="tglNav"></a>
                 <span class="linkDvdr"></span>
-                <!-- <a href="colleagueVisit.html" id="back"></a> -->
             </div>
             <div class="headRight">
             </div>
@@ -77,21 +58,6 @@
         </div>
     </header>
 
-    <!-- Citizen context bar -->
-    <!-- <a href="#" class="citizenBar clearfix" data-toggle="modal" data-target="#citDetail">
-    <div class="cntWrap">
-        <div class="padd-10">
-            <div class="danger clearfix">
-                <div class="citizenContextColor">
-                    <b style="background-color: orchid"></b>
-                    <b style="background-color: red"></b>
-                </div>
-                <div class="citTtl">Hanne Jensen<p id="address">441 E, Red Square, Aarus , DK - 50612</p></div>
-                <div class="caveInfo">Cave<br>Infection</div>
-            </div>
-        </div>
-    </div>
-</a> -->
 
     <div id="container">
 
@@ -161,14 +127,7 @@
     </div>
 
     <footer>
-        <!--<div class="cntWrap">
-            <div class="footerBtn clearfix">
-                <a href="#" class="mBtn">Save</a>
-            </div>
-        </div>
-        <div class="noNetwork small">
-            <div class="cntWrap">No Network!</div>
-        </div>-->
+
     </footer>
 
     <script src="../static/js/jquery.js"></script>

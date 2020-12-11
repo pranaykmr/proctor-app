@@ -8,7 +8,6 @@
     <meta name="description" content="ProcSmart">
     <meta name="author" content="Pranay Kumar Verma">
     <title>ProcSmart</title>
-    <!--<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">-->
     <link href="../static/css/bootstrap.css" rel="stylesheet">
     <link href="../static/css/app.css" rel="stylesheet">
 
@@ -17,7 +16,6 @@
 <body class="hideSlideMenu">
 
     <nav class="slideMenu">
-        <!-- Login information container -->
         <div class="loginInfo">
             <div class="snapHolder"><img src="../static/imgs/img1.png" /></div>
             <div class="loginDetail">
@@ -49,7 +47,6 @@
             <div class="headLeft">
                 <a href="#" id="tglNav"></a>
                 <span class="linkDvdr"></span>
-                <!-- <a href="colleagueVisit.html" id="back"></a> -->
             </div>
             <div class="headRight">
             </div>
@@ -59,21 +56,7 @@
         </div>
     </header>
 
-    <!-- Citizen context bar -->
-    <!-- <a href="#" class="citizenBar clearfix" data-toggle="modal" data-target="#citDetail">
-    <div class="cntWrap">
-        <div class="padd-10">
-            <div class="danger clearfix">
-                <div class="citizenContextColor">
-                    <b style="background-color: orchid"></b>
-                    <b style="background-color: red"></b>
-                </div>
-                <div class="citTtl">Hanne Jensen<p id="address">441 E, Red Square, Aarus , DK - 50612</p></div>
-                <div class="caveInfo">Cave<br>Infection</div>
-            </div>
-        </div>
-    </div>
-</a> -->
+
 
     <div id="container">
 
@@ -86,18 +69,7 @@
                                 placeholder="Search Student by Name"></div>
                         <div class="tblCell"><a href="#" class="cancelSearch">Clear</a></div>
                     </li>
-                    <!-- <li class="link">
-                        <a href="dummy.html" class="citizen">A</a>
-                    </li>
-                    <li class="link">
-                        <a href="dummy.html" class="citizen">B</a>
-                    </li>
-                    <li class="link">
-                        <a href="dummy.html" class="citizen">C</a>
-                    </li>
-                    <li class="link">
-                        <a href="dummy.html" class="citizen">D</a>
-                    </li> -->
+
                     {% for std in data.students %}
                     <li class="link">
                         <a href="dummy.html" class="citizen">{{std.name}}</a>
@@ -109,14 +81,7 @@
     </div>
 
     <footer>
-        <!--<div class="cntWrap">
-            <div class="footerBtn clearfix">
-                <a href="#" class="mBtn">Save</a>
-            </div>
-        </div>
-        <div class="noNetwork small">
-            <div class="cntWrap">No Network!</div>
-        </div>-->
+
     </footer>
 
     <script src="../static/js/jquery.js"></script>
