@@ -1,9 +1,10 @@
 import cv2
 import json
 import threading
+from datetime import datetime
 from flask import Flask, Response, render_template, url_for
 from proctorapp import app, db
-from proctorapp.models import User
+from proctorapp.models import User, Session, Logs
 from proctorapp.forms import RegistrationForm, LoginForm
 from proctorapp.proctoring_models import BaseModel, EyeTracker, Mouth_Opening, Head_Position, Object_Detector
 from flask import request
@@ -108,10 +109,17 @@ def handle_data_add_student():
 
 @app.route("/handle_data_create_session", methods=["GET", "POST"])
 def handle_data_create_session():
-    strtDate = request.form.get("strtDate", "")
-    endDate = request.form.get("endDate", "")
-    sessionName = request.form.get("sessionName", "")
+    strtDate = datetime.strptime(request.form.get("strtDate", ""), "%Y-%m-%dT%H:%M")
+    endDate = datetime.strptime(request.form.get("endDate", ""),  "%Y-%m-%dT%H:%M")
+    sessName = request.form.get("sessionName", "")
     sessionNotes = request.form.get("sessionNotes", "")
+    try:
+        session = Session(sessionname=sessName, startdate=strtDate, enddate=endDate, sessionnotes=sessionNotes)
+        db.session.add(session)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+
     return sessionListAdmin()
 
 
