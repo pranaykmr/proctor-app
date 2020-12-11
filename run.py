@@ -33,9 +33,9 @@ def indexAdmin():
     return render_template("indexAdmin.html")
 
 
-@app.route("/addStudent.html")
-def addStudent():
-    return render_template("addStudent.html")
+@app.route("/addUser.html")
+def addUser():
+    return render_template("addUser.html")
 
 
 @app.route("/createSession.html")
