@@ -17,9 +17,10 @@ class User(db.Model):
 
 class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sessionname = db.Column(db.DateTime, unique=True, nullable=False)
+    sessionname = db.Column(db.String(120), unique=True, nullable=False)
     startdate = db.Column(db.DateTime, unique=True, nullable=False)
     enddate = db.Column(db.DateTime, nullable=False)
+    sessionnotes = db.Column(db.String(120), unique=True, nullable=True)
 
     def __repr__(self):
         return f"User('{self.sessionname}', '{self.startdate}', '{self.enddate}')"
