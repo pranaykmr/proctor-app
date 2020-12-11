@@ -266,7 +266,7 @@ def insertLogs(sessionId):
 
 
 def checkForFlag(logs):
-    if len(logs["head_logger"]) > 100 or len(logs["mouth_logger"]) > 100 or len(logs["eye_logger"]) > 100 or len(logs["phone_logger"]) > 100:
+    if len(logs["head_logger"]) > 100 or len(logs["mouth_logger"]) > 100 or len(logs["eye_logger"]) > 100 or len(logs["phone_logger"]) > 10:
         user = User.query.filter_by(username=session["user"].username).first()
         user.isFlagged = True
         db.session.commit()
