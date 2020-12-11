@@ -132,7 +132,7 @@
                         </br>
                         {% for log in data.logs %}
                         <li>
-                            <h3>{{log.sessionname}}</h3>
+                            <h3>{{log.sessionname}} : {{log.timestamp.strftime("%m/%d/%Y, %H:%M")}}</h3>
                             </br>
                             <span>
                                 {{log.rawData}}
@@ -155,17 +155,12 @@
     <script src="../static/js/structure.js"></script>
     <script type="text/javascript">
         $(function () {
-
-
-
             $('#showLogs').click(function () {
-                debugger;
                 $('#logs').slideDown('fast');
                 $('#showLogs').hide();
                 $('#hideLogs').show();
             });
             $('#hideLogs').click(function () {
-                debugger;
                 $('#logs').slideUp('fast');
                 $('#showLogs').show();
                 $('#hideLogs').hide();
