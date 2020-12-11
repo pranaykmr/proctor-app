@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,13 +24,13 @@
                     ProcSmart</div>
             </div>
         </div><!-- index header with app logo ends -->
-    
+
         <div class="center-area">
             <div class="centered">
                 {% block content %} {% endblock %}
             </div>
         </div><!-- centrally aligned login form wrapper ends-->
-    
+
     </div>
     <script src="../static/js/jquery.js"></script>
     <script src="../static/js/bootstrap.js"></script>
@@ -37,6 +38,14 @@
     <script src="../static/js/structure.js"></script>
     <script type="text/javascript">
         $(function () {
+            $('#changepass[type="checkbox"]').click(function () {
+                if ($(this).is(":checked")) {
+                    $('#changepasswrap').slideDown('fast');
+                }
+                else if ($(this).is(":not(:checked)")) {
+                    $('#changepasswrap').slideUp('fast');
+                }
+            });
 
             $('#login').click(function (e) {
                 if (!$('#uid').val()) {
@@ -60,4 +69,5 @@
         });
     </script>
 </body>
+
 </html>
