@@ -95,7 +95,14 @@ def dummy():
     return render_template("dummy.html")
 
 
-@app.route("/sessionListAdmin.html", methods=["POST"])
+@app.route("/showUserData.html", methods=["GET"])
+def showUserData():
+    stdId = request.args.get("studentId")
+    user = User.query.filter_by(id=stdId).first()
+    return render_template("showUserData.html", data={"user": session["user"], "student": user})
+
+
+@app.route("/sessionListAdmin.html", methods=["GET", "POST"])
 def sessionListAdmin():
     if "user" in session:
         uname = session["user"].username

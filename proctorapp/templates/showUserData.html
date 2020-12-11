@@ -52,7 +52,7 @@
             <div class="headRight">
             </div>
             <div class="headTitle">
-                <h3>Add Student</h3>
+                <h3>User Details</h3>
             </div>
         </div>
     </header>
@@ -63,7 +63,7 @@
         <form method='post' action="{{ url_for('handle_data_add_user') }}">
             <section>
                 <div class="cntWrap">
-                    <h5>Add User</h5>
+                    <h5></h5>
                     <ul class="list">
                         <li>
                             <div>
@@ -72,63 +72,43 @@
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="firstName" class="control-label">First Name</label>
-                                                <input type="text" class="form-control" id="firstName" name="fname"
-                                                    placeholder="Enter First Name">
+                                                <input type="text" class="form-control" id="firstName"
+                                                    value="{{data.student.name.split()[0]}}" name="fname"
+                                                    disabled="disabled">
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="lastName" class="control-label">Last Name</label>
-                                                <input type="text" class="form-control" id="lastName" name="lname"
-                                                    placeholder="Enter Last Name">
+                                                <input type="text" class="form-control"
+                                                    value="{{data.student.name.split()}}" id="lastName" name="lname"
+                                                    placeholder="Enter Last Name" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
-                                                <label for="uid" class="control-label">Enter User Name</label>
-                                                <input type="text" class="form-control" id="userId" name="userId"
+                                                <label for="uid" class="control-label">UserName</label>
+                                                <input type="text" class="form-control" id="userId"
+                                                    value="{{data.student.username}}" disabled="disabled" name="userId"
                                                     placeholder="Enter User Id">
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="street" class="control-label">Email Id</label>
-                                                <input type="text" class="form-control" id="street" name="userEmail"
-                                                    placeholder="Enter Email">
+                                                <input type="text" class="form-control" value="{{data.student.email}}"
+                                                    id="street" name="userEmail" placeholder="Enter Email"
+                                                    disabled="disabled">
                                             </div>
                                         </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12">
-                                            <div>
-                                                <label class="custInput custInput_checkBox">Make Admin
-                                                    <input type="checkbox" name="isAdmin" id="adminUser">
-                                                    <b class="custInput_wrap"></b>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <div class="alert alert-danger medium" style="display: none">Please fill at
-                                                least
-                                                one search criteria.
-                                            </div>
-                                        </div>
                                     </div>
                                 </form>
                             </div>
                         </li>
                         <li>
-                            <div class="text-right">
-                                <button type="button" class="mBtn cancelBtn disableBtn" id="clearForm">Clear</button>
-                                <button type="submit" class="mBtn" id="searchResource" data-target="#searchCit"><a
-                                        class='mtbn' style="color : white">Add</a>
-                                </button>
-                            </div>
                         </li>
                     </ul>
                 </div>
