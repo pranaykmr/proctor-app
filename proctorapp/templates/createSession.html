@@ -43,19 +43,19 @@
     <!-- Application based navigation -->
     <ul class="nav" id="appNav">
       <li>
-        <a href="createSession.html"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
+        <a href="{{url_for('createSession')}}"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
       </li>
       <li>
-        <a href="addStudent.html"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
+        <a href="{{url_for('addStudent')}}"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
       </li>
       <li>
-        <a href="sessionListAdmin.html"><i class="glyphicon glyphicon-search"></i> Session List</a>
+        <a href="{{url_for('sessionListAdmin')}}"><i class="glyphicon glyphicon-search"></i> Session List</a>
       </li>
       <li>
-        <a href="studentList.html"><i class="glyphicon glyphicon-comment"></i> Student List</a>
+        <a href="{{url_for('studentList')}}"><i class="glyphicon glyphicon-comment"></i> Student List</a>
       </li>
       <li>
-        <a href="indexAdmin.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+        <a href="{{url_for('admin_home')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
       </li>
     </ul>
   </nav>

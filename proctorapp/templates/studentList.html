@@ -25,39 +25,21 @@
                 <p>{{ 'Admin' if data.user.isAdmin else 'Student' }}<br>User id: {{data.user.id}}</p>
             </div>
         </div>
-        <!-- Citizen based navigation -->
-        <!-- <ul class="nav" id="citizenNav">
-        <li class="disable"><a href="#">Medicine</a></li>
-        <li><a href="serviceOverview.html">Service Overview <b class="semiDeveloped">&#9679;</b></a></li>
-        <li class="disable">
-            <a href="#" data-toggle="collapse" data-target="#demo" class="accordNav collapsed">Citizen File</a>
-            <ul class="nav subNav collapse" id="demo">
-                <li class="disable"><a href="cf.html">Citizen File Overview</a></li>
-                <li class="disable"><a href="noteModule.html">Notes</a></li>
-                <li><a href="deadline.html">Deadline</a></li>
-                <li><a href="cf.html">Common Language 3</a></li>
-            </ul>
-        </li>
-        <li class="disable"><a href="#">Notes</a></li>
-        <li><a href="citPlan.html">Citizen Plan <b class="semiDeveloped">&#9679;</b></a></li>
-    </ul> -->
-        <!--<div class="nav" id="citizenNav"></div>-->
-        <!-- Application based navigation -->
         <ul class="nav" id="appNav">
             <li>
-                <a href="createSession.html"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
+                <a href="{{url_for('createSession')}}"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
             </li>
             <li>
-                <a href="addStudent.html"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
+                <a href="{{url_for('addStudent')}}"><i class="glyphicon glyphicon-duplicate"></i> Add Student</a>
             </li>
             <li>
-                <a href="sessionListAdmin.html"><i class="glyphicon glyphicon-search"></i> Session List</a>
+                <a href="{{url_for('sessionListAdmin')}}"><i class="glyphicon glyphicon-search"></i> Session List</a>
             </li>
             <li>
-                <a href="studentList.html"><i class="glyphicon glyphicon-comment"></i> Student List</a>
+                <a href="{{url_for('studentList')}}"><i class="glyphicon glyphicon-comment"></i> Student List</a>
             </li>
             <li>
-                <a href="indexAdmin.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                <a href="{{url_for('admin_home')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
             </li>
         </ul>
     </nav>
