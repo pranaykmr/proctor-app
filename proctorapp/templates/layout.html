@@ -14,6 +14,50 @@
 </head>
 
 <body>
-    {% block content %} {% endblock %}
+    <div class="indexBackdrop">
+
+        <div class="indexHeader">
+            <div class="indexWrap">
+                <div
+                    style="margin-left: auto;margin-right: auto;display: block;color: #0096bb;font-size: larger;font-weight: 900;padding: 5px;">
+                    ProcSmart</div>
+            </div>
+        </div><!-- index header with app logo ends -->
+    
+        <div class="center-area">
+            <div class="centered">
+                {% block content %} {% endblock %}
+            </div>
+        </div><!-- centrally aligned login form wrapper ends-->
+    
+    </div>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/autosize.min.js"></script>
+    <script src="../static/js/structure.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#login').click(function (e) {
+                if (!$('#uid').val()) {
+                    $('.alert').fadeIn();
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                    // window.location.href = "{{ url_for('sessionList') }}";
+                }
+            });
+
+            $('.alert > .close').click(function () {
+                $('.alert').fadeOut();
+            })
+
+            $("#uid").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $("#login").click();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

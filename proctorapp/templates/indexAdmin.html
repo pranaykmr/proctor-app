@@ -1,17 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="indexBackdrop">
 
-    <div class="indexHeader">
-        <div class="indexWrap">
-            <div
-                style="margin-left: auto;margin-right: auto;display: block;color: #0096bb;font-size: larger;font-weight: 900;padding: 5px;">
-                ProcSmart</div>
-        </div>
-    </div><!-- index header with app logo ends -->
-
-    <div class="center-area">
-        <div class="centered">
             <div class="loginForm">
                 <form role="form" id="loginVitae", method="POST" action="{{ url_for('sessionListAdmin') }}">
                     <div class="form-group">
@@ -27,7 +16,15 @@
                     <div class="alert alert-danger medium" style="display: none">
                         <a href="#" class="close" aria-label="close">&times;</a>User Name required!
                     </div>
-
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    <a href="#" class="close" aria-label="close">&times;</a>{{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
                     <div class="btnWrap">
                         <button type="submit" class="btn-block mBtn" id="login">Login</button>
                     </div>
@@ -38,39 +35,4 @@
                     </small>
                 </div>
             </div>
-        </div>
-    </div><!-- centrally aligned login form wrapper ends-->
-</div>
-
-
-<script src="../static/js/jquery.js"></script>
-<script src="../static/js/bootstrap.js"></script>
-<script src="../static/js/autosize.min.js"></script>
-<script src="../static/js/structure.js"></script>
-<script type="text/javascript">
-    $(function () {
-
-        $('#login').click(function (e) {
-            if (!$('#uid').val()) {
-                $('.alert').fadeIn();
-                e.preventDefault();
-                e.stopPropagation();
-            } else {
-                // window.location.href = 'studentList.html';
-            }
-        });
-
-        $('.alert > .close').click(function () {
-            $('.alert').fadeOut();
-        })
-
-        $("#uid").keyup(function (event) {
-            if (event.keyCode == 13) {
-                $("#login").click();
-            }
-        });
-
-
-    });
-</script>
 {% endblock content %}
