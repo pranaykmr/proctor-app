@@ -72,8 +72,11 @@
 
                     {% for std in data.students %}
                     <li class="link">
-                        <a href="{{url_for('showUserData', studentId=std.id)}}" class="citizen">{{std.name}} <i
-                                class="flag" style="float: right;">&nbsp;</i></a>
+                        <a href="{{url_for('showUserData', studentId=std.id)}}" class="citizen">{{std.name}}
+                            {% if std.isFlagged %}
+                            <i class="flag" style="float: right;">&nbsp;</i>
+                            {%endif%}
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>

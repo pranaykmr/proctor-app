@@ -66,7 +66,7 @@ def sessionList():
         data = getSessionData()
         session["user"] = user
         return render_template("sessionList.html", data={"user": session["user"], "sessions": data})
-    flash('Login Unsuccessful. Please check username and password', 'danger')
+    flash("Login Unsuccessful. Please check username and password", "danger")
     return redirect(url_for("home"))
 
 
@@ -110,7 +110,7 @@ def sessionListAdmin():
             "sessionListAdmin.html",
             data={"user": session["user"], "sessions": data},
         )
-    flash('Login Unsuccessful. Please check username and password', 'danger')
+    flash("Login Unsuccessful. Please check username and password", "danger")
     return redirect(url_for("admin_home"))
 
 
@@ -121,7 +121,7 @@ def studentList():
     # TODO check if data is not empty
     return render_template(
         "studentList.html",
-        data={"user": session['user'], "students": data},
+        data={"user": session["user"], "students": data},
     )
 
 
@@ -147,9 +147,8 @@ def handle_data_add_user():
     userId = request.form.get("userId", "")
     userEmail = request.form.get("userEmail", "")
     isAdmin = True if request.form.get("isAdmin", False) == "on" else False
-
     try:
-        user = User(username=f"{userId}", email=userEmail, password="asd", name=f"{fname} {lname}", isAdmin=isAdmin)
+        user = User(username=f"{userId}", email=userEmail, password="asd", name=f"{fname} {lname}", isAdmin=isAdmin, isFlagged=False)
         db.session.add(user)
         db.session.commit()
     except Exception as e:
@@ -191,6 +190,10 @@ def invoke_models(video):
             logger["mouth_logger"].extend(mouth_open.mouth_opening())
             logger["eye_logger"].extend(eye_tracker.eye_detector())
             logger["phone_logger"].extend(object_detector.person_and_phone())
+            logger["userInfo"] = {}
+            logger["userInfo"]["id"] = session["user"].id
+            logger["userInfo"]["username"] = session["user"].username
+            checkForFlag(logger)
             # json_object=json.dumps(logger, indent = 4)
             with open("log.json", "w") as outfile:
                 json.dump(logger, outfile)
@@ -212,13 +215,10 @@ def insertLogs():
             db.session.commit()
         except Exception as e:
             print(e)
-        # os.remove("log.json")
-        # with open("log.json", "w") as outfile:
-        #     json.dump("", outfile)
-    # global currFlag
-    # if currFlag:
-    #     timer()
 
 
-# def timer():
-#     threading.Timer(10.0, hello).start()
+def checkForFlag(logs):
+    if len(logs["head_logger"]) > 100 or len(logs["mouth_logger"]) > 100 or len(logs["eye_logger"]) > 100 or len(logs["phone_logger"]) > 100:
+        user = User.query.filter_by(username=session["user"].username).first()
+        user.isFlagged = True
+        db.session.commit()
