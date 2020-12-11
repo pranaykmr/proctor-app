@@ -85,10 +85,25 @@ def dummy():
     return render_template("dummy.html")
 
 
-@app.route("/showUserData.html", methods=["GET"])
+@app.route("/updateUser.html", methods=["POST"])
+def updateUser():
+    if request.form["action"] == "toggleFlag":
+        uid = request.form.get("userId")
+        user = User.query.filter_by(id=session["currstdId"].id).first()
+        user.isFlagged = not user.isFlagged
+        db.session.commit()
+    elif request.form["action"] == "delUser":
+        User.query.filter_by(id=session["currstdId"].id).delete()
+        db.session.commit()
+    del session["currstdId"]
+    return redirect(url_for("studentList"))
+
+
+@app.route("/showUserData.html", methods=["GET", "POST"])
 def showUserData():
     stdId = request.args.get("studentId")
     user = User.query.filter_by(id=stdId).first()
+    session["currstdId"] = user
     return render_template("showUserData.html", data={"user": session["user"], "student": user})
 
 
