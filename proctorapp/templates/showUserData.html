@@ -122,7 +122,19 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="list">
+                    <ul class="list noTitle">
+                        <li>
+                            <div>
+                                <button type="button" name="showLogs" class="mBtn" id="showLogs">Show Raw Logs</button>
+                                <button type="button" class="mBtn cancelBtn disableBtn" name="hideLogs"
+                                    style="display: none;" id="hideLogs">HideLogs</button>
+                                <b class="custInput_wrap"></b>
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="list noTitle" id="logs" style="display: none;">
+                        </br>
                         {% for log in data.logs %}
                         <li>
                             <h3>{{log.sessionname}}</h3>
@@ -146,6 +158,26 @@
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/autosize.min.js"></script>
     <script src="../static/js/structure.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+
+
+            $('#showLogs').click(function () {
+                debugger;
+                $('#logs').slideDown('fast');
+                $('#showLogs').hide();
+                $('#hideLogs').show();
+            });
+            $('#hideLogs').click(function () {
+                debugger;
+                $('#logs').slideUp('fast');
+                $('#showLogs').show();
+                $('#hideLogs').hide();
+            });
+
+        });
+    </script>
 </body>
 
 </html>
