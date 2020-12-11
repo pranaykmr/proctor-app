@@ -95,7 +95,7 @@
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="street" class="control-label">Email Id</label>
-                                                <input type="text" class="form-control" id="street" name="userEmail"
+                                                <input type="text" class="form-control" id="emailId" name="userEmail"
                                                     placeholder="Enter Email">
                                             </div>
                                         </div>
@@ -113,9 +113,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <div class="alert alert-danger medium" style="display: none">Please fill at
-                                                least
-                                                one search criteria.
+                                            <div class="alert alert-danger medium" style="display: none">
+                                                <a href="#" class="close" aria-label="close">&times;</a>Please fill all
+                                                fields
                                             </div>
                                         </div>
                                     </div>
@@ -125,8 +125,8 @@
                         <li>
                             <div class="text-right">
                                 <button type="button" class="mBtn cancelBtn disableBtn" id="clearForm">Clear</button>
-                                <button type="submit" class="mBtn" id="searchResource" data-target="#searchCit"><a
-                                        class='mtbn' style="color : white">Add</a>
+                                <button type="submit" class="mBtn" id="addUser" data-target="#searchCit"><a class='mtbn'
+                                        style="color : white">Add</a>
                                 </button>
                             </div>
                         </li>
@@ -144,6 +144,23 @@
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/autosize.min.js"></script>
     <script src="../static/js/structure.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#addUser').click(function (e) {
+                if (!$('#firstName').val() || !$('#lastName').val() || !$('#userId').val() || !$('#emailId').val()) {
+                    $('.alert').fadeIn();
+                    e.preventDefault();
+                    e.stopPropagation();
+                } else {
+                }
+            });
+
+            $('.alert > .close').click(function () {
+                $('.alert').fadeOut();
+            })
+        });
+    </script>
 </body>
 
 </html>

@@ -69,14 +69,14 @@
                   <div class="row">
                     <div class="col-xs-12 col-sm-6">
                       <div class="form-group">
-                        <label for="startdate" class="control-label">Start Date</label>
+                        <label for="startdate" class="control-label">Start Date *</label>
                         <input type="datetime-local" class="form-control" id="strtDate" name="strtDate"
                           placeholder="Enter Start Date" />
                       </div>
                     </div>
                     <div class="col-xs-12 col-sm-6">
                       <div class="form-group">
-                        <label for="enddate" class="control-label">End Date</label>
+                        <label for="enddate" class="control-label">End Date *</label>
                         <input type="datetime-local" class="form-control" id="endDate" name="endDate"
                           placeholder="Enter End Date" />
                       </div>
@@ -85,8 +85,8 @@
                   <div class="row">
                     <div class="col-xs-12 col-sm-6">
                       <div class="form-group">
-                        <label for="uid" class="control-label">Enter Session Name</label>
-                        <input type="text" class="form-control" id="citCPR" name="sessionName"
+                        <label for="uid" class="control-label">Enter Session Name *</label>
+                        <input type="text" class="form-control" id="sessionName" name="sessionName"
                           placeholder="Enter Session Name" />
                       </div>
                     </div>
@@ -100,7 +100,7 @@
                   <div class="row">
                     <div class="col-xs-12">
                       <div class="alert alert-danger medium" style="display: none">
-                        Please fill at least one search criteria.
+                        <a href="#" class="close" aria-label="close">&times;</a>Please Fill all Mandatory Feilds
                       </div>
                     </div>
                   </div>
@@ -112,7 +112,7 @@
                 <button type="button" class="mBtn cancelBtn disableBtn" id="clearForm">
                   Clear
                 </button>
-                <button type="submit" class="mBtn" id="searchResource" data-toggle="modal" data-target="#searchCit">
+                <button type="submit" class="mBtn" id="createsession" data-toggle="modal" data-target="#searchCit">
                   <a class="mtbn" style="color: white">Create</a>
                 </button>
               </div>
@@ -132,6 +132,23 @@
   <script src="../static/js/bootstrap.js"></script>
   <script src="../static/js/autosize.min.js"></script>
   <script src="../static/js/structure.js"></script>
+  <script type="text/javascript">
+    $(function () {
+
+      $('#createsession').click(function (e) {
+        if (!$('#strtDate').val() || !$('#endDate').val() || !$('#sessionName').val()) {
+          $('.alert').fadeIn();
+          e.preventDefault();
+          e.stopPropagation();
+        } else {
+        }
+      });
+
+      $('.alert > .close').click(function () {
+        $('.alert').fadeOut();
+      })
+    });
+  </script>
 </body>
 
 </html>
