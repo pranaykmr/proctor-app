@@ -3,7 +3,7 @@ import os
 import json
 import threading
 from datetime import datetime
-from flask import Flask, Response, render_template, url_for
+from flask import Flask, Response, render_template, url_for, redirect, flash
 from proctorapp import app, db
 from proctorapp.models import User, Session, Logs
 from proctorapp.proctoring_models import BaseModel, EyeTracker, Mouth_Opening, Head_Position, Object_Detector
@@ -16,17 +16,6 @@ session = {}
 @app.route("/")
 @app.route("/index")
 def home():
-    # global currFlag
-    # currFlag = False
-    # insertLogs()
-    # global session
-    # if 'user' in session and not session['user'].isAdmin:
-    #     return sessionList()
-    # elif 'user' in session and session['user'].isAdmin:
-    #     return sessionListAdmin()
-    # else:
-    #     session = {}
-    #     return render_template("index.html")
     return render_home(isAdmin=False)
 
 
@@ -71,13 +60,14 @@ def sessionList():
         uname = request.form.get("uname")
         passwd = request.form.get("pass")
 
-    user = User.query.filter_by(username=uname, password=passwd).first()
+    user = User.query.filter_by(username=uname, password=passwd, isAdmin=False).first()
 
     if user:
         data = getSessionData()
         session["user"] = user
         return render_template("sessionList.html", data={"user": session["user"], "sessions": data})
-    return render_template(url_for("home"))
+    flash('Login Unsuccessful. Please check username and password', 'danger')
+    return redirect(url_for("home"))
 
 
 @app.route("/addUser.html")
@@ -111,24 +101,27 @@ def sessionListAdmin():
         uname = request.form.get("uname")
         passwd = request.form.get("pass")
 
-    user = User.query.filter_by(username=uname, password=passwd).first()
+    user = User.query.filter_by(username=uname, password=passwd, isAdmin=True).first()
 
-    session["user"] = user
-    data = getSessionData()
-    return render_template(
-        "sessionListAdmin.html",
-        data={"user": session["user"], "sessions": data},
-    )
+    if user:
+        session["user"] = user
+        data = getSessionData()
+        return render_template(
+            "sessionListAdmin.html",
+            data={"user": session["user"], "sessions": data},
+        )
+    flash('Login Unsuccessful. Please check username and password', 'danger')
+    return redirect(url_for("admin_home"))
 
 
 @app.route("/studentList.html")
 def studentList():
 
-    data = User.query.filter_by(isAdmin=False)
-
+    data = User.query.filter_by(isAdmin=False).all()
+    # TODO check if data is not empty
     return render_template(
         "studentList.html",
-        data={"user": session["user"], "students": data.all()},
+        data={"user": session['user'], "students": data},
     )
 
 
