@@ -155,9 +155,10 @@ def getSessionData():
     return Session.query.all()
 
 
-@app.route("/examPage.html")
+@app.route("/examPage.html", methods=["POST", "GET"])
 def examPage():
-    return render_template("examPage.html", data={"user": session["user"]})
+    sessionId = request.args.get("sessionId")
+    return render_template("examPage.html", data={"user": session["user"], "sessionId": sessionId})
 
 
 @app.route("/run_model")
