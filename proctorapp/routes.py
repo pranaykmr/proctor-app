@@ -59,13 +59,18 @@ def sessionList():
     if "user" in session:
         uname = session["user"].username
         passwd = session["user"].password
+        changePass = False
     else:
         uname = request.form.get("uname")
         passwd = request.form.get("pass")
+        changePass = True if request.form.get("changePass", False) == "on" else False
 
     user = User.query.filter_by(username=uname, password=passwd, isAdmin=False).first()
 
     if user:
+        if changePass:
+            user.password = request.form.get("newPass", False)
+            db.session.commit()
         data = getSessionData()
         session["user"] = user
         return render_template("sessionList.html", data={"user": session["user"], "sessions": data})
@@ -127,13 +132,18 @@ def sessionListAdmin():
     if "user" in session:
         uname = session["user"].username
         passwd = session["user"].password
+        changePass = False
     else:
         uname = request.form.get("uname")
         passwd = request.form.get("pass")
+        changePass = True if request.form.get("changePass", False) == "on" else False
 
     user = User.query.filter_by(username=uname, password=passwd, isAdmin=True).first()
 
     if user:
+        if changePass:
+            user.password = request.form.get("newPass", False)
+            db.session.commit()
         session["user"] = user
         data = getSessionData()
         return render_template(
