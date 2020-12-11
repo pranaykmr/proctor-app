@@ -60,7 +60,7 @@
 
     <div id="container">
 
-        <form method='post' action="{{ url_for('handle_data_add_user') }}">
+        <form method='post' action="{{ url_for('updateUser') }}">
             <section>
                 <div class="cntWrap">
                     <h5></h5>
@@ -72,6 +72,9 @@
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="firstName" class="control-label">First Name</label>
+                                                {% if data.student.isFlagged %}
+                                                <i class="flag" style="float: right;">&nbsp;</i>
+                                                {%endif%}
                                                 <input type="text" class="form-control" id="firstName"
                                                     value="{{data.student.name.split()[0]}}" name="fname"
                                                     disabled="disabled">
@@ -109,6 +112,14 @@
                             </div>
                         </li>
                         <li>
+                            <div class="text-right">
+                                <button type="submit" class="mBtn cancelBtn disableBtn" value="delUser" name="action"
+                                    id="delUser">Delete
+                                    User</button>
+                                <button type="submit" class="mBtn" name="action" value="toggleFlag"
+                                    id="toggleFlag">Toggle Flag
+                                </button>
+                            </div>
                         </li>
                     </ul>
                 </div>
