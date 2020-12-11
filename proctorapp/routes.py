@@ -80,9 +80,20 @@ def createSession():
     return render_template("createSession.html", data={"user": session["user"]})
 
 
-@app.route("/dummy.html")
-def dummy():
-    return render_template("dummy.html")
+@app.route("/showSessionData.html")
+def showSessionData():
+    sessionId = request.args.get("sessionId")
+    currsession = Session.query.filter_by(id=sessionId).first()
+    session["currSession"] = currsession
+    return render_template("showSessionData.html", data={"user": session["user"], "sessionData": currsession})
+
+
+@app.route("/deleteSession.html", methods=["POST"])
+def deleteSession():
+    Session.query.filter_by(id=session["currSession"].id).delete()
+    db.session.commit()
+    del session["currSession"]
+    return redirect(url_for("sessionListAdmin"))
 
 
 @app.route("/updateUser.html", methods=["POST"])

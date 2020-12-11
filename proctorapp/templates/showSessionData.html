@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="ProcSmart">
+    <meta name="author" content="Pranay Kumar Verma">
+    <title>ProcSmart</title>
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+    <link href="../static/css/app.css" rel="stylesheet">
+
+</head>
+
+<body class="hideSlideMenu">
+
+    <nav class="slideMenu">
+        <!-- Login information container -->
+        <div class="loginInfo">
+            <div class="snapHolder"><img src="../static/imgs/img1.png" /></div>
+            <div class="loginDetail">
+                <h5>{{data.user.name}}</h5>
+                <p>{{ 'Admin' if data.user.isAdmin else 'Student' }}<br>User id: {{data.user.username}}</p>
+            </div>
+        </div>
+        <ul class="nav" id="appNav">
+            <li>
+                <a href="{{url_for('createSession')}}"><i class="glyphicon glyphicon-duplicate"></i> Create Session</a>
+            </li>
+            <li>
+                <a href="{{url_for('addUser')}}"><i class="glyphicon glyphicon-duplicate"></i> Add User</a>
+            </li>
+            <li>
+                <a href="{{url_for('sessionListAdmin')}}"><i class="glyphicon glyphicon-search"></i> Session List</a>
+            </li>
+            <li>
+                <a href="{{url_for('studentList')}}"><i class="glyphicon glyphicon-comment"></i> Student List</a>
+            </li>
+            <li>
+                <a href="{{url_for('logout')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    <header>
+        <div class="cntWrap clearfix">
+            <div class="headLeft">
+                <a href="#" id="tglNav"></a>
+                <span class="linkDvdr"></span>
+            </div>
+            <div class="headRight">
+            </div>
+            <div class="headTitle">
+                <h3>User Details</h3>
+            </div>
+        </div>
+    </header>
+
+
+    <div id="container">
+
+        <form method='post' action="{{ url_for('deleteSession') }}">
+            <section>
+                <div class="cntWrap">
+                    <h5>Create Session</h5>
+                    <ul class="list">
+                        <li>
+                            <div>
+                                <form id="addUser">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="startdate" class="control-label">Start Date *</label>
+                                                <input type="text"
+                                                    value="{{data.sessionData.startdate.strftime("%m/%d/%Y, %H:%M")}}"
+                                                    disabled="disabled" class="form-control" id="strtDate"
+                                                    name="strtDate" placeholder="Enter Start Date" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="enddate" class="control-label">End Date *</label>
+                                                <input type="text" class="form-control" id="endDate"
+                                                    value="{{data.sessionData.enddate.strftime("%m/%d/%Y, %H:%M")}}"
+                                                    disabled="disabled" name="endDate" placeholder="Enter End Date" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="uid" class="control-label">Session Name *</label>
+                                                <input type="text" class="form-control"
+                                                    value="{{data.sessionData.sessionname}}" disabled="disabled"
+                                                    id="sessionName" name="sessionName"
+                                                    placeholder="Enter Session Name" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="street" class="control-label">Session Notes</label>
+                                                <input type="text" class="form-control"
+                                                    value="{{data.sessionData.sessionnotes}}" disabled="disabled"
+                                                    id="street" name="sessionNotes" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="alert alert-danger medium" style="display: none">
+                                                <a href="#" class="close" aria-label="close">&times;</a>Please Fill all
+                                                Mandatory Feilds
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="text-right">
+                                <button type="submit" class="mBtn" id="delSession" data-toggle="modal">
+                                    Delete Session
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </form>
+    </div>
+
+    <footer>
+
+    </footer>
+
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/autosize.min.js"></script>
+    <script src="../static/js/structure.js"></script>
+</body>
+
+</html>
