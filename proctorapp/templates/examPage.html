@@ -45,7 +45,7 @@
         <!-- Application based navigation -->
         <ul class="nav" id="appNav">
             <li>
-                <a href="index.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                <a href="{{url_for('home')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
             </li>
         </ul>
     </nav>
@@ -89,6 +89,11 @@
                 <br />
                 <img src="../static/imgs/1600356116_5-things.jpg" />
                 <img src="{{ url_for('run_model') }}" style="display: none;" />
+                <br />
+                <br />
+                <button class="mBtn" id="searchResource">
+                    <a href="{{ url_for('home') }}" class="mtbn" style="color: white">End Session</a>
+                </button>
             </div>
         </section><!-- main contianer div ended -->
     </div>

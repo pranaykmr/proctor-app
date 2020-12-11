@@ -28,7 +28,7 @@ class Session(db.Model):
 
 class Logs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    rawData = db.Column(db.String(120), nullable=False)
+    rawData = db.Column(db.BLOB, nullable=False)
     userId = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.DateTime, unique=True, nullable=False)
 
