@@ -27,7 +27,6 @@ def admin_home():
 def render_home(isAdmin=False):
     global currFlag
     currFlag = False
-    insertLogs()
     global session
     if "user" in session and not session["user"].isAdmin:
         return sessionList()
@@ -41,11 +40,15 @@ def render_home(isAdmin=False):
             return render_template("index.html")
 
 
-@app.route("/logout")
+@app.route("/logout", methods=['GET','POST'])
 def logout():
     global currFlag
     currFlag = False
-    insertLogs()
+
+    sessionId = request.args.get('sessionId')
+
+    if sessionId:
+        insertLogs(sessionId)
     global session
     session = {}
     return render_template("index.html")
@@ -228,7 +231,7 @@ def invoke_models(video):
         print(e)
 
 
-def insertLogs():
+def insertLogs(sessionId):
     try:
         data = None
         with open("log.json") as f:
@@ -237,7 +240,8 @@ def insertLogs():
         print(e)
     if data:
         try:
-            logs = Logs(rawData=str.encode(json.dumps(data)), userId=1, timestamp=datetime.now())
+            session = Session.query.filter_by(id=sessionId).first()
+            logs = Logs(rawData=str.encode(json.dumps(data)), userId=session['user'].id, sessionid=session.id, sessionname=session.sessionname, timestamp=datetime.now())
             db.session.add(logs)
             db.session.commit()
         except Exception as e:
