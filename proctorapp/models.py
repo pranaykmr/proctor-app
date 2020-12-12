@@ -26,7 +26,7 @@ class Session(db.Model):
     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     def __repr__(self):
-        return f"User('{self.sessionname}', '{self.startdate}', '{self.enddate}')"
+        return f"Session('{self.sessionname}', '{self.startdate}', '{self.enddate}')"
 
 
 class Logs(db.Model):
@@ -38,4 +38,4 @@ class Logs(db.Model):
     timestamp = db.Column(db.DateTime, unique=True, nullable=False)
 
     def __repr__(self):
-        return f"User('{self.sessionname}', '{self.startdate}', '{self.enddate}')"
+        return f"Logs('{self.sessionname}', '{self.userId}')"

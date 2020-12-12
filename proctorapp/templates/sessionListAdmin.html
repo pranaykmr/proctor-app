@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head lang="en">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="ProcSmart">
-    <meta name="author" content="Pranay Kumar Verma">
-    <title>ProcSmart</title>
-    <link href="../static/css/bootstrap.css" rel="stylesheet">
-    <link href="../static/css/app.css" rel="stylesheet">
-
-</head>
-
+{% extends "baselayout.html" %}
+{% block basePage %}
 <body class="hideSlideMenu">
 
     <nav class="slideMenu">
@@ -82,14 +69,10 @@
         </section><!-- main contianer div ended -->
     </div>
 
-    <footer>
-
-    </footer>
 
     <script src="../static/js/jquery.js"></script>
     <script src="../static/js/bootstrap.js"></script>
     <script src="../static/js/autosize.min.js"></script>
     <script src="../static/js/structure.js"></script>
 </body>
-
-</html>
+{% endblock basePage%}
