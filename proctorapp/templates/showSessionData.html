@@ -40,7 +40,7 @@
             <div class="headRight">
             </div>
             <div class="headTitle">
-                <h3>User Details</h3>
+                <h3>Session Details</h3>
             </div>
         </div>
     </header>
@@ -51,7 +51,7 @@
         <form method='post' action="{{ url_for('deleteSession') }}">
             <section>
                 <div class="cntWrap">
-                    <h5>Create Session</h5>
+                    <h5>Session Details</h5>
                     <ul class="list">
                         <li>
                             <div>
@@ -60,17 +60,16 @@
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="startdate" class="control-label">Start Date *</label>
-                                                <input type="text"
-                                                    value="{{data.sessionData.startdate.strftime("%m/%d/%Y, %H:%M")}}"
-                                                    disabled="disabled" class="form-control" id="strtDate"
-                                                    name="strtDate" placeholder="Enter Start Date" />
+                                                <input type="text" value="{{data.sessionData.startdate.strftime("
+                                                    %m/%d/%Y, %H:%M")}}" disabled="disabled" class="form-control"
+                                                    id="strtDate" name="strtDate" placeholder="Enter Start Date" />
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-6">
                                             <div class="form-group">
                                                 <label for="enddate" class="control-label">End Date *</label>
                                                 <input type="text" class="form-control" id="endDate"
-                                                    value="{{data.sessionData.enddate.strftime("%m/%d/%Y, %H:%M")}}"
+                                                    value="{{data.sessionData.enddate.strftime(" %m/%d/%Y, %H:%M")}}"
                                                     disabled="disabled" name="endDate" placeholder="Enter End Date" />
                                             </div>
                                         </div>
