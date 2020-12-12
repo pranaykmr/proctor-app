@@ -1,5 +1,6 @@
 {% extends "baselayout.html" %}
 {% block basePage %}
+
 <body class="hideSlideMenu">
 
     <nav class="slideMenu">
@@ -13,7 +14,8 @@
         </div>
         <ul class="nav" id="appNav">
             <li>
-                <a href="{{ url_for('logout', sessionId=data.sessionId) }}"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                <a href="{{ url_for('logout', sessionId=data.sessionId) }}"><i class="glyphicon glyphicon-log-out"></i>
+                    Logout</a>
             </li>
         </ul>
     </nav>
@@ -45,7 +47,8 @@
                 <br />
                 <br />
                 <button class="mBtn" id="searchResource">
-                    <a href="{{ url_for('logout', sessionId=data.sessionId) }}" class="mtbn" style="color: white">End Session</a>
+                    <a href="{{ url_for('logout', sessionId=data.sessionId) }}" class="mtbn" style="color: white">End
+                        Session</a>
                 </button>
             </div>
         </section><!-- main contianer div ended -->

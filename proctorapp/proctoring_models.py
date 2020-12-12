@@ -38,7 +38,8 @@ class BaseModel:
         # Camera internals
         self.focal_length = self.size[1]
         self.center = (self.size[1] / 2, self.size[0] / 2)
-        self.camera_matrix = np.array([[self.focal_length, 0, self.center[0]], [0, self.focal_length, self.center[1]], [0, 0, 1]], dtype="double")
+        self.camera_matrix = np.array([[self.focal_length, 0, self.center[0]], [
+                                      0, self.focal_length, self.center[1]], [0, 0, 1]], dtype="double")
 
         # mouth
         self.outer_points = [[49, 59], [50, 58], [51, 57], [52, 56], [53, 55]]
@@ -49,7 +50,8 @@ class BaseModel:
         self.left = [36, 37, 38, 39, 40, 41]
         self.right = [42, 43, 44, 45, 46, 47]
         self.kernel = np.ones((9, 9), np.uint8)
-        self.logger = {"head_logger": [], "mouth_logger": [], "phone_logger": [], "eye_logger": []}
+        self.logger = {"head_logger": [], "mouth_logger": [],
+                       "phone_logger": [], "eye_logger": []}
 
 
 class EyeTracker(BaseModel):
@@ -75,9 +77,12 @@ class EyeTracker(BaseModel):
             _, thresh = cv2.threshold(eyes_gray, 50, 255, cv2.THRESH_BINARY)
             thresh = self.process_thresh(thresh)
 
-            eyeball_pos_left = self.contouring(thresh[:, 0:mid], mid, img, end_points_left)
-            eyeball_pos_right = self.contouring(thresh[:, mid:], mid, img, end_points_right, True)
-            eye_logger.extend(self.print_eye_pos(img, eyeball_pos_left, eyeball_pos_right))
+            eyeball_pos_left = self.contouring(
+                thresh[:, 0:mid], mid, img, end_points_left)
+            eyeball_pos_right = self.contouring(
+                thresh[:, mid:], mid, img, end_points_right, True)
+            eye_logger.extend(self.print_eye_pos(
+                img, eyeball_pos_left, eyeball_pos_right))
         return eye_logger
 
     def eye_on_mask(self, mask, side, shape):
@@ -112,7 +117,8 @@ class EyeTracker(BaseModel):
 
     def contouring(self, thresh, mid, img, end_points, right=False):
 
-        cnts, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        cnts, _ = cv2.findContours(
+            thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         try:
             cnt = max(cnts, key=cv2.contourArea)
             M = cv2.moments(cnt)
@@ -138,11 +144,14 @@ class EyeTracker(BaseModel):
         if left == right and left != 0:
             text = ""
             if left == 1:
-                eye_logger.append({"exception": "looking left", "timestamp": getCurrentTime()})
+                eye_logger.append(
+                    {"exception": "looking left", "timestamp": getCurrentTime()})
             elif left == 2:
-                eye_logger.append({"exception": "looking right", "timestamp": getCurrentTime()})
+                eye_logger.append(
+                    {"exception": "looking right", "timestamp": getCurrentTime()})
             elif left == 3:
-                eye_logger.append({"exception": "looking up", "timestamp": getCurrentTime()})
+                eye_logger.append(
+                    {"exception": "looking up", "timestamp": getCurrentTime()})
             # font = cv2.FONT_HERSHEY_SIMPLEX
             # cv2.putText(img, text, (30, 30), font,1, (0, 255, 255), 2, cv2.LINE_AA)
         return eye_logger
@@ -181,7 +190,8 @@ class Mouth_Opening(BaseModel):
                 if self.d_inner[i] + 2 < shape[p2][1] - shape[p1][1]:
                     cnt_inner += 1
             if cnt_outer > 3 and cnt_inner > 2:
-                mouth_logger.append({"exception": "Mouth Open", "timestamp": getCurrentTime()})
+                mouth_logger.append(
+                    {"exception": "Mouth Open", "timestamp": getCurrentTime()})
                 # print('Mouth open')
         return mouth_logger
 
@@ -218,15 +228,18 @@ class Head_Position(BaseModel):
             # We use this to draw a line sticking out of the nose
 
             (nose_end_point2D, jacobian) = cv2.projectPoints(
-                np.array([(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, self.camera_matrix, dist_coeffs
+                np.array(
+                    [(0.0, 0.0, 1000.0)]), rotation_vector, translation_vector, self.camera_matrix, dist_coeffs
             )
 
             # for p in image_points:
             #     cv2.circle(img, (int(p[0]), int(p[1])), 3, (0,0,255), -1)
 
             p1 = (int(image_points[0][0]), int(image_points[0][1]))
-            p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
-            x1, x2 = self.head_pose_points(img, rotation_vector, translation_vector, self.camera_matrix)
+            p2 = (int(nose_end_point2D[0][0][0]),
+                  int(nose_end_point2D[0][0][1]))
+            x1, x2 = self.head_pose_points(
+                img, rotation_vector, translation_vector, self.camera_matrix)
 
             try:
                 m = (p2[1] - p1[1]) / (p2[0] - p1[0])
@@ -241,14 +254,18 @@ class Head_Position(BaseModel):
                 ang2 = 90
 
             if ang1 >= 48:
-                head_pos_logger.append({"exception": "Head Down", "timestamp": getCurrentTime()})
+                head_pos_logger.append(
+                    {"exception": "Head Down", "timestamp": getCurrentTime()})
             elif ang1 <= -48:
-                head_pos_logger.append({"exception": "Head Up", "timestamp": getCurrentTime()})
+                head_pos_logger.append(
+                    {"exception": "Head Up", "timestamp": getCurrentTime()})
 
             if ang2 >= 48:
-                head_pos_logger.append({"exception": "Head Right", "timestamp": getCurrentTime()})
+                head_pos_logger.append(
+                    {"exception": "Head Right", "timestamp": getCurrentTime()})
             elif ang2 <= -48:
-                head_pos_logger.append({"exception": "Head Left", "timestamp": getCurrentTime()})
+                head_pos_logger.append(
+                    {"exception": "Head Left", "timestamp": getCurrentTime()})
         return head_pos_logger
 
     def head_pose_points(self, img, rotation_vector, translation_vector, camera_matrix):
@@ -277,7 +294,8 @@ class Head_Position(BaseModel):
         front_size = img.shape[1]
         front_depth = front_size * 2
         val = [rear_size, rear_depth, front_size, front_depth]
-        point_2d = self.get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val)
+        point_2d = self.get_2d_points(
+            img, rotation_vector, translation_vector, camera_matrix, val)
         y = (point_2d[5] + point_2d[8]) // 2
         x = point_2d[2]
 
@@ -305,7 +323,8 @@ class Head_Position(BaseModel):
         point_3d = np.array(point_3d, dtype=np.float).reshape(-1, 3)
 
         # Map to 2d img points
-        (point_2d, _) = cv2.projectPoints(point_3d, rotation_vector, translation_vector, camera_matrix, dist_coeffs)
+        (point_2d, _) = cv2.projectPoints(point_3d, rotation_vector,
+                                          translation_vector, camera_matrix, dist_coeffs)
         point_2d = np.int32(point_2d.reshape(-1, 2))
         return point_2d
 
@@ -313,10 +332,12 @@ class Head_Position(BaseModel):
 class Object_Detector(BaseModel):
     def __init__(self, video):
         if not path.exists("./proctorapp/mlmodel/models/yolov3.weights"):
-            _ = wget.download("https://pjreddie.com/media/files/yolov3.weights", out="./proctorapp/mlmodel/models/yolov3.weights")
+            _ = wget.download("https://pjreddie.com/media/files/yolov3.weights",
+                              out="./proctorapp/mlmodel/models/yolov3.weights")
         super().__init__(video)
         self.yolo = yolov3.YoloV3()
-        yolov3.load_darknet_weights(self.yolo, "./proctorapp/mlmodel/models/yolov3.weights")
+        yolov3.load_darknet_weights(
+            self.yolo, "./proctorapp/mlmodel/models/yolov3.weights")
 
     def person_and_phone(self):
         phone_logger = []
@@ -326,7 +347,8 @@ class Object_Detector(BaseModel):
         img = img.astype(np.float32)
         img = np.expand_dims(img, 0)
         img = img / 255
-        class_names = [c.strip() for c in open("./proctorapp/mlmodel/models/classes.TXT").readlines()]
+        class_names = [c.strip() for c in open(
+            "./proctorapp/mlmodel/models/classes.TXT").readlines()]
         try:
             boxes, scores, classes, nums = self.yolo(img)
         except Exception as e:
@@ -337,9 +359,12 @@ class Object_Detector(BaseModel):
             if int(classes[0][i] == 0):
                 count += 1
             if int(classes[0][i] == 67):
-                phone_logger.append({"exception": "Mobile Phone detected", "timestamp": getCurrentTime()})
+                phone_logger.append(
+                    {"exception": "Mobile Phone detected", "timestamp": getCurrentTime()})
         if count == 0:
-            phone_logger.append({"exception": "No person detected", "timestamp": getCurrentTime()})
+            phone_logger.append(
+                {"exception": "No person detected", "timestamp": getCurrentTime()})
         elif count > 1:
-            phone_logger.append({"exception": "More than one person detected", "timestamp": getCurrentTime()})
+            phone_logger.append(
+                {"exception": "More than one person detected", "timestamp": getCurrentTime()})
         return phone_logger

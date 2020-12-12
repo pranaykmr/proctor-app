@@ -16,6 +16,8 @@ session = {}
 '''
 Login routes for Admin and User
 '''
+
+
 @app.route("/")
 @app.route("/index")
 def home():
@@ -30,6 +32,8 @@ def admin_home():
 '''
 Landing page after session Logout
 '''
+
+
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     global currFlag
@@ -47,6 +51,8 @@ def logout():
 '''
 Session List for Student
 '''
+
+
 @app.route("/sessionList.html", methods=["POST"])
 def sessionList():
     if "user" in session:
@@ -76,6 +82,8 @@ def sessionList():
 '''
 Session List for Admin
 '''
+
+
 @app.route("/sessionListAdmin.html", methods=["GET", "POST"])
 def sessionListAdmin():
     if "user" in session:
@@ -108,6 +116,8 @@ def sessionListAdmin():
 '''
 Add New User/Admin
 '''
+
+
 @app.route("/addUser.html")
 def addUser():
     return render_template("addUser.html", data={"user": session["user"]})
@@ -116,6 +126,8 @@ def addUser():
 '''
 Add User
 '''
+
+
 @app.route("/handle_data_add_user", methods=["POST"])
 def handle_data_add_user():
     fname = request.form.get("fname", "")
@@ -137,6 +149,8 @@ def handle_data_add_user():
 '''
 Add new Exam Session
 '''
+
+
 @app.route("/createSession.html")
 def createSession():
     return render_template("createSession.html", data={"user": session["user"]})
@@ -145,6 +159,8 @@ def createSession():
 '''
 Add Exam Session
 '''
+
+
 @app.route("/handle_data_create_session", methods=["POST"])
 def handle_data_create_session():
     strtDate = datetime.strptime(
@@ -167,6 +183,8 @@ def handle_data_create_session():
 '''
 Display Session Details
 '''
+
+
 @app.route("/showSessionData.html")
 def showSessionData():
     sessionId = request.args.get("sessionId")
@@ -178,6 +196,8 @@ def showSessionData():
 '''
 Delete Session
 '''
+
+
 @app.route("/deleteSession.html", methods=["POST"])
 def deleteSession():
     Session.query.filter_by(id=session["currSession"].id).delete()
@@ -189,6 +209,8 @@ def deleteSession():
 '''
 Update/Delete User information
 '''
+
+
 @app.route("/updateUser.html", methods=["POST"])
 def updateUser():
     if request.form["action"] == "toggleFlag":
@@ -206,6 +228,8 @@ def updateUser():
 '''
 Show User Details
 '''
+
+
 @app.route("/showUserData.html", methods=["GET", "POST"])
 def showUserData():
     stdId = request.args.get("studentId")
@@ -218,6 +242,8 @@ def showUserData():
 '''
 Display Student List to Admin
 '''
+
+
 @app.route("/studentList.html")
 def studentList():
 
@@ -232,6 +258,8 @@ def studentList():
 '''
 Start Exam Session
 '''
+
+
 @app.route("/examPage.html", methods=["POST", "GET"])
 def examPage():
     sessionId = request.args.get("sessionId")
@@ -241,6 +269,8 @@ def examPage():
 '''
 Invoke ML models
 '''
+
+
 @app.route("/run_model")
 def run_model():
     video = cv2.VideoCapture(0)
