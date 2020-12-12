@@ -16,7 +16,6 @@ from tensorflow.keras.layers import (
     BatchNormalization
 )
 from tensorflow.keras.regularizers import l2
-import wget
 
 def YoloV3(size=None, channels=3, classes=80):
 

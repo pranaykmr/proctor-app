@@ -1,8 +1,11 @@
 import cv2
 import math
+import os.path
+from os import path
 import numpy as np
 from datetime import datetime
 from proctorapp import yolov3
+import wget
 from proctorapp.mlmodel.face_detector import get_face_detector, find_faces
 from proctorapp.mlmodel.face_landmarks import get_landmark_model, detect_marks, draw_marks
 
@@ -309,6 +312,8 @@ class Head_Position(BaseModel):
 
 class Object_Detector(BaseModel):
     def __init__(self, video):
+        if not path.exists("./proctorapp/mlmodel/models/yolov3.weights"):
+            _ = wget.download("https://pjreddie.com/media/files/yolov3.weights", out="./proctorapp/mlmodel/models/yolov3.weights")
         super().__init__(video)
         self.yolo = yolov3.YoloV3()
         yolov3.load_darknet_weights(self.yolo, "./proctorapp/mlmodel/models/yolov3.weights")
@@ -322,7 +327,6 @@ class Object_Detector(BaseModel):
         img = np.expand_dims(img, 0)
         img = img / 255
         class_names = [c.strip() for c in open("./proctorapp/mlmodel/models/classes.TXT").readlines()]
-        # yolo_obj = yolov3.YoloV3()
         try:
             boxes, scores, classes, nums = self.yolo(img)
         except Exception as e:

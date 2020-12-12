@@ -301,6 +301,8 @@ def insertLogs(sessionId):
             )
             db.session.add(logs)
             db.session.commit()
+            f = open("log.json", "w")
+            f.truncate(0)
         except Exception as e:
             print(e)
 
