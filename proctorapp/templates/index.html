@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "loginlayout.html" %}
 {% block content %}
 <div class="loginForm">
     <form role="form" id="loginVitae" method="POST" action="{{ url_for('sessionList') }}">
@@ -25,7 +25,7 @@
                 <li>
                     <div id="changepasswrap" style="display: none;">
                         <label for="changepass" class="control-label">New Password</label>
-                        <input type="text" class="form-control" name="newPass" id="newPass"
+                        <input type="password" class="form-control" name="newPass" id="newPass"
                             placeholder="Enter New Pass" />
                     </div>
                 </li>
