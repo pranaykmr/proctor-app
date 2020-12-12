@@ -75,7 +75,7 @@ def sessionList():
         data = getSessionData()
         session["user"] = user
         return render_template("sessionList.html", data={"user": session["user"], "sessions": data})
-    flash("Login Unsuccessful. Please check username and password", "danger")
+    flash("Username or Password Incorrect", "danger")
     return redirect(url_for("home"))
 
 
@@ -109,7 +109,7 @@ def sessionListAdmin():
             "sessionListAdmin.html",
             data={"user": session["user"], "sessions": data},
         )
-    flash("Login Unsuccessful. Please check username and password", "danger")
+    flash("Username or Password Incorrect", "danger")
     return redirect(url_for("admin_home"))
 
 
