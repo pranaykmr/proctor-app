@@ -11,7 +11,6 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     isAdmin = db.Column(db.Boolean, nullable=False)
     isFlagged = db.Column(db.Boolean, nullable=False)
-    # sessionname = db.relationship('Session', backref='user', lazy=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.isAdmin}')"
@@ -23,7 +22,6 @@ class Session(db.Model):
     startdate = db.Column(db.DateTime, nullable=False)
     enddate = db.Column(db.DateTime, nullable=False)
     sessionnotes = db.Column(db.String(120), nullable=True)
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
     def __repr__(self):
         return f"Session('{self.sessionname}', '{self.startdate}', '{self.enddate}')"
