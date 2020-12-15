@@ -281,10 +281,38 @@ def invoke_models(video):
     try:
         global currFlag
         currFlag = True
+
         eye_tracker = EyeTracker(video)
+
+        ######## Show Video ###########
+        ret, img = video.read()
+        ret, jpeg = cv2.imencode('.jpg', img)
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
         mouth_open = Mouth_Opening(video)
+
+        ######## Show Video ###########
+        ret, img = video.read()
+        ret, jpeg = cv2.imencode('.jpg', img)
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
         head_pos = Head_Position(video)
+
+        ######## Show Video ###########
+        ret, img = video.read()
+        ret, jpeg = cv2.imencode('.jpg', img)
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
         object_detector = Object_Detector(video)
+
+        ######## Show Video ###########
+        ret, img = video.read()
+        ret, jpeg = cv2.imencode('.jpg', img)
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
         logger = {"head_logger": [], "mouth_logger": [],
                   "phone_logger": [], "eye_logger": []}
