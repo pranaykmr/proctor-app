@@ -285,34 +285,22 @@ def invoke_models(video):
         eye_tracker = EyeTracker(video)
 
         ######## Show Video ###########
-        ret, img = video.read()
-        ret, jpeg = cv2.imencode('.jpg', img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        yield showVideo(video)
 
         mouth_open = Mouth_Opening(video)
 
         ######## Show Video ###########
-        ret, img = video.read()
-        ret, jpeg = cv2.imencode('.jpg', img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        yield showVideo(video)
 
         head_pos = Head_Position(video)
 
         ######## Show Video ###########
-        ret, img = video.read()
-        ret, jpeg = cv2.imencode('.jpg', img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        yield showVideo(video)
 
         object_detector = Object_Detector(video)
 
         ######## Show Video ###########
-        ret, img = video.read()
-        ret, jpeg = cv2.imencode('.jpg', img)
-        frame = jpeg.tobytes()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        yield showVideo(video)
 
         logger = {"head_logger": [], "mouth_logger": [],
                   "phone_logger": [], "eye_logger": []}
@@ -322,34 +310,22 @@ def invoke_models(video):
             logger["head_logger"].extend(head_pos.head_position())
 
             ######## Show Video ###########
-            ret, img = video.read()
-            ret, jpeg = cv2.imencode('.jpg', img)
-            frame = jpeg.tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            yield showVideo(video)
 
             logger["mouth_logger"].extend(mouth_open.mouth_opening())
 
             ######## Show Video ###########
-            ret, img = video.read()
-            ret, jpeg = cv2.imencode('.jpg', img)
-            frame = jpeg.tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            yield showVideo(video)
 
             logger["eye_logger"].extend(eye_tracker.eye_detector())
 
             ######## Show Video ###########
-            ret, img = video.read()
-            ret, jpeg = cv2.imencode('.jpg', img)
-            frame = jpeg.tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            yield showVideo(video)
 
             logger["phone_logger"].extend(object_detector.person_and_phone())
 
             ######## Show Video ###########
-            ret, img = video.read()
-            ret, jpeg = cv2.imencode('.jpg', img)
-            frame = jpeg.tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            yield showVideo(video)
 
             logger["userInfo"] = {}
             logger["userInfo"]["id"] = session["user"].id
@@ -357,16 +333,20 @@ def invoke_models(video):
             checkForFlag(logger)
 
             ######## Show Video ###########
-            ret, img = video.read()
-            ret, jpeg = cv2.imencode('.jpg', img)
-            frame = jpeg.tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            yield showVideo(video)
 
             # json_object=json.dumps(logger, indent = 4)
             with open("log.json", "w") as outfile:
                 json.dump(logger, outfile)
     except Exception as e:
         print(e)
+
+
+def showVideo(video):
+    ret, img = video.read()
+    ret, jpeg = cv2.imencode('.jpg', img)
+    frame = jpeg.tobytes()
+    return (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 # HELPER FUNCTIONS
